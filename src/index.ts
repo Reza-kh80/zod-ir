@@ -1,18 +1,19 @@
 import { z } from "zod";
-import { isMelliCode, isCardNumber, isIranianMobile } from "./utils";
+import {
+  isMelliCode,
+  isCardNumber,
+  isIranianMobile,
+  isSheba,
+  isPostalCode,
+  isLandline,
+} from "./utils";
 import { getMessage, BaseOptions } from "./constants";
 
-/**
- * Zod schema for validating Iranian National Code (Melli Code).
- */
 export const zMelliCode = (options?: BaseOptions) =>
   z.string().refine((val) => isMelliCode(val), {
     message: getMessage("melliCode", options),
   });
 
-/**
- * Zod schema for validating Iranian Bank Card Numbers (Luhn Algorithm).
- */
 export const zCardNumber = (options?: BaseOptions) =>
   z.string().refine((val) => isCardNumber(val), {
     message: getMessage("cardNumber", options),
@@ -22,9 +23,6 @@ interface MobileOptions extends BaseOptions {
   strictZero?: boolean | "optional";
 }
 
-/**
- * Zod schema for validating Iranian Mobile Numbers.
- */
 export const zIranianMobile = (options?: MobileOptions) =>
   z
     .string()
@@ -35,5 +33,26 @@ export const zIranianMobile = (options?: MobileOptions) =>
       }
     );
 
-// Export raw utility functions for non-Zod usage
-export { isMelliCode, isCardNumber, isIranianMobile };
+export const zSheba = (options?: BaseOptions) =>
+  z.string().refine((val) => isSheba(val), {
+    message: getMessage("sheba", options),
+  });
+
+export const zPostalCode = (options?: BaseOptions) =>
+  z.string().refine((val) => isPostalCode(val), {
+    message: getMessage("postalCode", options),
+  });
+
+export const zLandline = (options?: BaseOptions) =>
+  z.string().refine((val) => isLandline(val), {
+    message: getMessage("landline", options),
+  });
+
+export {
+  isMelliCode,
+  isCardNumber,
+  isIranianMobile,
+  isSheba,
+  isPostalCode,
+  isLandline,
+};

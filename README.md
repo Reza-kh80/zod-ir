@@ -1,4 +1,4 @@
-# Zod Iranian Utils
+# Zod Iranian Utils 🇮🇷
 
 <div align="center">
 
@@ -13,22 +13,19 @@ Compatible with **React Hook Form**, **Next.js**, and Node.js backends.
 
 ## Features ✨
 
-- ✅ **National Code (Code Melli):** Validates using the official checksum algorithm.
-- 💳 **Bank Card:** Validates 16-digit card numbers using the Luhn algorithm.
-- 📱 **Mobile Number:** Validates Iranian mobile formats (`09xx`, `+989xx`, `9xx`).
-- 🌍 **Bilingual:** Built-in error messages in **Persian (Farsi)** and **English**.
-- 🌲 **Tree-shakable:** Import only what you need.
-- 🛡️ **Zero Dependency:** (Only requires `zod` as a peer dependency).
+- ✅ **National Code:** Official checksum validation.
+- 💳 **Bank Card:** 16-digit Luhn algorithm check.
+- 📱 **Mobile Number:** Supports `09xx`, `+989xx`, `9xx`.
+- 🏦 **Sheba (IBAN):** ISO 7064 structure validation.
+- 📮 **Postal Code:** Iranian 10-digit postal code format.
+- ☎️ **Landline:** Fixed line validation with area code.
+- 🌍 **Bilingual:** Built-in Persian & English error messages.
+- 🌲 **Tree-shakable:** Minimal bundle size.
 
 ---
 
 ## Installation 📦
 
-You need to install `zod` and `zod-ir`:
-
 ```bash
 npm install zod zod-ir
-# or
-yarn add zod zod-ir
-# or
-pnpm add zod zod-ir
+```

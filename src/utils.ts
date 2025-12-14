@@ -1,16 +1,9 @@
-/**
- * Validates Iranian National Code (Melli Code) based on the official algorithm.
- * @param code The 10-digit national code string.
- */
 export function isMelliCode(code: string): boolean {
-  // Basic format check
   if (!/^\d{10}$/.test(code)) return false;
 
-  // Check for repeated digits (e.g., 1111111111) which are invalid
   const check = parseInt(code[9]);
   if (/^(\d)\1+$/.test(code)) return false;
 
-  // Calculate control digit
   const sum =
     code
       .substring(0, 9)
@@ -20,19 +13,13 @@ export function isMelliCode(code: string): boolean {
   return sum < 2 ? check === sum : check === 11 - sum;
 }
 
-/**
- * Validates Bank Card Number using the Luhn algorithm.
- * @param code The 16-digit card number.
- */
 export function isCardNumber(code: string): boolean {
-  // Remove hyphens or spaces if present
   const sanitized = code.replace(/[\-\s]/g, "");
   if (!/^\d{16}$/.test(sanitized)) return false;
 
   let sum = 0;
   let shouldDouble = false;
 
-  // Traverse from right to left
   for (let i = sanitized.length - 1; i >= 0; i--) {
     let digit = parseInt(sanitized[i]);
 
@@ -49,19 +36,9 @@ export function isCardNumber(code: string): boolean {
 }
 
 interface MobileValidationOptions {
-  /**
-   * strictZero:
-   * - true: Must start with 0 (e.g., 0912...)
-   * - false: Must NOT start with 0 (e.g., 912...)
-   * - "optional": Both are accepted (default)
-   */
   strictZero?: boolean | "optional";
 }
 
-/**
- * Validates Iranian Mobile Number.
- * Supports 09xx, 9xx, and +989xx formats.
- */
 export function isIranianMobile(
   mobile: string,
   { strictZero = "optional" }: MobileValidationOptions = {}
@@ -78,4 +55,32 @@ export function isIranianMobile(
   }
 
   return new RegExp(pattern).test(mobile);
+}
+
+export function isSheba(code: string): boolean {
+  const iban = code.toUpperCase().replace(/[\-\s]/g, "");
+
+  if (iban.length !== 26) return false;
+  if (!iban.startsWith("IR")) return false;
+
+  const newStr = iban.substring(4) + "1827" + iban.substring(2, 4);
+
+  const remainder = Array.from(newStr)
+    .map((c) => parseInt(c, 36))
+    .reduce((remainder, value) => {
+      const v = value < 10 ? value : value;
+      return (Number(remainder + "" + v) % 97).toString();
+    }, "");
+
+  return parseInt(remainder) === 1;
+}
+
+export function isPostalCode(code: string): boolean {
+  if (!/^\d{10}$/.test(code)) return false;
+  if (code.startsWith("0")) return false;
+  return true;
+}
+
+export function isLandline(code: string): boolean {
+  return /^0\d{2}\d{8}$/.test(code);
 }
