@@ -42,58 +42,49 @@
 npm install zod zod-ir
 # or
 yarn add zod zod-ir
+```
 
-Usage 🚀
+## Usage 🚀
 1. Basic Validation
-
-```bash
-import { z } from "zod";
-import { 
-  zMelliCode, 
-  zIranianMobile, 
-  zCardNumber,
-  zSheba,
-  zPostalCode,
-  zLandline
-} from "zod-ir";
+```typescript
+import { z } from 'zod';
+import { zMelliCode, zSheba, zIranianMobile, zCardNumber, zPostalCode, zLandline } from 'zod-ir';
 
 const UserSchema = z.object({
-  // 1. National Code (Default Persian Error)
+  // Default Persian error message
   nationalCode: zMelliCode(),
   
-  // 2. Mobile (Strict Mode: Must start with 0)
+  // Custom error message & Strict mode (must start with 0)
   mobile: zIranianMobile({ strictZero: true, message: "شماره موبایل اشتباه است" }),
   
-  // 3. Bank Card
-  card: zCardNumber(),
-
-  // 4. Sheba (IBAN) - English Error
+  // English error message for Sheba
   iban: zSheba({ locale: "en" }),
 
-  // 5. Postal Code
+  // Bank Card
+  card: zCardNumber(),
+
+  // Postal Code
   postal: zPostalCode(),
 
-  // 6. Landline (Phone)
-  phone: zLandline({ message: "تلفن ثابت نامعتبر است" })
+  // Landline (Phone)
+  phone: zLandline(),
 });
 
-// Example Usage
-const result = UserSchema.safeParse({
-  nationalCode: "1234567891",
-  mobile: "09121234567",
-  card: "6037991155667788",
-  iban: "IR120770000000000000000001",
-  postal: "1234567890",
-  phone: "02122334455"
-});
-
-if (!result.success) {
-  console.log(result.error.issues);
+try {
+  UserSchema.parse({
+    nationalCode: "1234567891",
+    mobile: "09121234567",
+    iban: "IR120770000000000000000001",
+    card: "6037991155667788",
+    postal: "1234567890",
+    phone: "02122334455"
+  });
+} catch (err) {
+  console.log(err);
 }
-
-
+```
 2. Usage with React Hook Form 📋
-```bash
+```typescript
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -116,14 +107,15 @@ export default function MyForm() {
     </form>
   );
 }
+```
 
-API Reference 📚
-Validator	Description	Options
-zMelliCode	National ID validation	message, locale
-zCardNumber	Bank Card (Luhn) validation	message, locale
-zIranianMobile	Mobile Number validation	strictZero, message, locale
-zSheba	IBAN (Sheba) validation	message, locale
-zPostalCode	Postal Code validation	message, locale
-zLandline	Landline phone validation	message, locale
+## API Reference 📚
 
-
+| Validator | Description | Options |
+| :--- | :--- | :--- |
+| `zMelliCode` | Validates Iranian National Code (Melli Code) | `message`, `locale` |
+| `zCardNumber` | Validates 16-digit bank card numbers (Luhn algorithm) | `message`, `locale` |
+| `zIranianMobile` | Validates Iranian mobile numbers | `strictZero`, `message`, `locale` |
+| `zSheba` | Validates Sheba (IBAN) structure and checksum | `message`, `locale` |
+| `zPostalCode` | Validates 10-digit Iranian postal codes | `message`, `locale` |
+| `zLandline` | Validates landline phone numbers with area codes | `message`, `locale` |
