@@ -12,25 +12,44 @@ export function isMelliCode(code: string): boolean {
   return sum < 2 ? check === sum : check === 11 - sum;
 }
 
+export function isShenaseMelli(code: string): boolean {
+  if (code.length !== 11 || !/^\d{11}$/.test(code)) return false;
+
+  const tenth = parseInt(code[9]);
+  const inputCheck = parseInt(code[10]);
+  const coefficients = [29, 27, 23, 19, 17, 29, 27, 23, 19, 17];
+
+  let sum = 0;
+  for (let i = 0; i < 10; i++) {
+    const digit = parseInt(code[i]);
+    sum += (digit + tenth + 2) * coefficients[i];
+  }
+
+  const remainder = sum % 11;
+  const calculatedCheck = remainder === 10 ? 0 : remainder;
+
+  return calculatedCheck === inputCheck;
+}
+
+export function isPassport(code: string): boolean {
+  return /^[A-Za-z][0-9]{8,9}$/.test(code);
+}
+
 export function isCardNumber(code: string): boolean {
   const sanitized = code.replace(/[\-\s]/g, "");
   if (!/^\d{16}$/.test(sanitized)) return false;
 
   let sum = 0;
   let shouldDouble = false;
-
   for (let i = sanitized.length - 1; i >= 0; i--) {
     let digit = parseInt(sanitized[i]);
-
     if (shouldDouble) {
       digit *= 2;
       if (digit > 9) digit -= 9;
     }
-
     sum += digit;
     shouldDouble = !shouldDouble;
   }
-
   return sum % 10 === 0;
 }
 
@@ -44,36 +63,28 @@ export function isIranianMobile(
 ): boolean {
   const corePattern = "9\\d{9}";
   let pattern = "";
-
-  if (strictZero === true) {
-    pattern = `^0${corePattern}$`;
-  } else if (strictZero === false) {
-    pattern = `^${corePattern}$`;
-  } else {
-    pattern = `^(?:0|\\+98)?${corePattern}$`;
-  }
+  if (strictZero === true) pattern = `^0${corePattern}$`;
+  else if (strictZero === false) pattern = `^${corePattern}$`;
+  else pattern = `^(?:0|\\+98)?${corePattern}$`;
 
   return new RegExp(pattern).test(mobile);
 }
 
 export function isSheba(code: string): boolean {
   const iban = code.toUpperCase().replace(/[\-\s]/g, "");
-
   if (iban.length !== 26 || !iban.startsWith("IR")) return false;
 
   const newStr = iban.substring(4) + iban.substring(0, 4);
-
   const numericString = newStr
     .split("")
-    .map((char) => {
-      const code = char.charCodeAt(0);
-      return code >= 48 && code <= 57 ? char : (code - 55).toString();
+    .map((c) => {
+      const code = c.charCodeAt(0);
+      return code >= 48 && code <= 57 ? c : (code - 55).toString();
     })
     .join("");
 
   try {
-    const remainder = BigInt(numericString) % BigInt(97);
-    return remainder === BigInt(1);
+    return BigInt(numericString) % BigInt(97) === BigInt(1);
   } catch {
     return false;
   }
@@ -85,4 +96,10 @@ export function isPostalCode(code: string): boolean {
 
 export function isLandline(code: string): boolean {
   return /^0\d{2}\d{8}$/.test(code);
+}
+
+export function verifyAndNormalize(value: string): string {
+  return value
+    .replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d).toString())
+    .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d).toString());
 }

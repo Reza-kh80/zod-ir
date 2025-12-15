@@ -1,6 +1,8 @@
 export const ERROR_MESSAGES = {
   fa: {
     melliCode: "کد ملی نامعتبر است",
+    shenaseMelli: "شناسه ملی نامعتبر است",
+    passport: "شماره گذرنامه نامعتبر است",
     cardNumber: "شماره کارت نامعتبر است",
     mobile: "شماره موبایل نامعتبر است",
     sheba: "شماره شبا نامعتبر است",
@@ -9,6 +11,8 @@ export const ERROR_MESSAGES = {
   },
   en: {
     melliCode: "Invalid national code",
+    shenaseMelli: "Invalid legal person ID (Shenase Melli)",
+    passport: "Invalid passport number",
     cardNumber: "Invalid card number",
     mobile: "Invalid mobile number",
     sheba: "Invalid Sheba (IBAN) number",
@@ -25,7 +29,7 @@ export interface BaseOptions {
 }
 
 export const getMessage = (
-  key: keyof (typeof ERROR_MESSAGES)["fa"],
+  key: keyof typeof ERROR_MESSAGES["fa"],
   options?: BaseOptions
 ): string => {
   if (options?.message) return options.message;

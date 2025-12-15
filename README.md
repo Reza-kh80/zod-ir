@@ -6,7 +6,7 @@
   <p>
     A lightweight, TypeScript-first extension for Zod.
     <br />
-    Compatible with React Hook Form, Next.js, and Node.js.
+    Compatible with React Hook Form, Next.js, NestJS, and Node.js.
   </p>
   
   <p>
@@ -27,11 +27,14 @@
 ## Features ✨
 
 - ✅ **National Code:** Validates using the official checksum algorithm.
+- 🏢 **Shenase Melli:** Validates Legal Person ID (Company ID).
 - 💳 **Bank Card:** Validates 16-digit card numbers (Luhn algorithm).
 - 📱 **Mobile Number:** Validates `09xx`, `+989xx`, `9xx`.
 - 🏦 **Sheba (IBAN):** Validates structure and checksum (ISO 7064).
+- ✈️ **Passport:** Validates Iranian Passport numbers.
 - 📮 **Postal Code:** Validates 10-digit Iranian postal codes.
 - ☎️ **Landline:** Validates fixed line numbers with area codes.
+- 🔄 **Auto-fix Digits:** Helper to automatically convert Persian/Arabic digits to English.
 - 🌍 **Bilingual:** Built-in error messages in **Persian** and **English**.
 
 ---
@@ -46,51 +49,52 @@ yarn add zod zod-ir
 
 ## Usage 🚀
 
-1. Basic Validation
+1. Basic Validation & Auto-Fix
+   This example shows how to validate a form and automatically convert Persian digits (e.g., ۰۹۱۲) to English.
 
 ```typescript
 import { z } from "zod";
 import {
   zMelliCode,
-  zSheba,
+  zShenaseMelli,
   zIranianMobile,
   zCardNumber,
-  zPostalCode,
-  zLandline,
+  zSheba,
+  zPassport,
+  preprocessNumber,
 } from "zod-ir";
 
 const UserSchema = z.object({
-  // Default Persian error message
-  nationalCode: zMelliCode(),
+  // 1. National Code with Auto-Fix (Converts ۱۲۳ -> 123)
+  nationalCode: preprocessNumber(zMelliCode()),
 
-  // Custom error message & Strict mode (must start with 0)
-  mobile: zIranianMobile({
-    strictZero: true,
-    message: "شماره موبایل اشتباه است",
-  }),
+  // 2. Company ID (Shenase Melli)
+  companyId: zShenaseMelli({ message: "شناسه ملی نامعتبر است" }),
 
-  // English error message for Sheba
-  iban: zSheba({ locale: "en" }),
+  // 3. Mobile (Strict Mode: Must start with 0)
+  mobile: zIranianMobile({ strictZero: true }),
 
-  // Bank Card
+  // 4. Bank Card
   card: zCardNumber(),
 
-  // Postal Code
-  postal: zPostalCode(),
+  // 5. Sheba (IBAN) - English Error
+  iban: zSheba({ locale: "en" }),
 
-  // Landline (Phone)
-  phone: zLandline(),
+  // 6. Passport
+  passport: zPassport(),
 });
 
+// Example Usage
 try {
-  UserSchema.parse({
-    nationalCode: "1234567891",
+  const result = UserSchema.parse({
+    nationalCode: "۱۲۳۴۵۶۷۸۹۱", // User typed in Farsi
+    companyId: "10100448712",
     mobile: "09121234567",
-    iban: "IR120770000000000000000001",
-    card: "6037991155667788",
-    postal: "1234567890",
-    phone: "02122334455",
+    card: "6362147010005732",
+    iban: "IR330620000000202901868005",
+    passport: "A12345678",
   });
+  console.log("Valid Data:", result);
 } catch (err) {
   console.log(err);
 }
@@ -102,10 +106,11 @@ try {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { zMelliCode } from "zod-ir";
+import { zMelliCode, preprocessNumber } from "zod-ir";
 
 const schema = z.object({
-  nationalId: zMelliCode({ message: "کد ملی صحیح نیست" }),
+  // Automatically fixes Persian digits typed by user
+  nationalId: preprocessNumber(zMelliCode({ message: "کد ملی صحیح نیست" })),
 });
 
 export default function MyForm() {
@@ -119,8 +124,12 @@ export default function MyForm() {
 
   return (
     <form onSubmit={handleSubmit((d) => console.log(d))}>
-      <input {...register("nationalId")} placeholder="Code Melli" />
-      <p>{errors.nationalId?.message}</p>
+      <input
+        {...register("nationalId")}
+        placeholder="کد ملی (حتی فارسی)"
+        dir="auto"
+      />
+      <p style={{ color: "red" }}>{errors.nationalId?.message}</p>
       <button type="submit">Submit</button>
     </form>
   );
@@ -129,23 +138,27 @@ export default function MyForm() {
 
 ## API Reference 📚
 
-| Validator        | Description                                           | Options                           |
-| :--------------- | :---------------------------------------------------- | :-------------------------------- |
-| `zMelliCode`     | Validates Iranian National Code (Melli Code)          | `message`, `locale`               |
-| `zCardNumber`    | Validates 16-digit bank card numbers (Luhn algorithm) | `message`, `locale`               |
-| `zIranianMobile` | Validates Iranian mobile numbers                      | `strictZero`, `message`, `locale` |
-| `zSheba`         | Validates Sheba (IBAN) structure and checksum         | `message`, `locale`               |
-| `zPostalCode`    | Validates 10-digit Iranian postal codes               | `message`, `locale`               |
-| `zLandline`      | Validates landline phone numbers with area codes      | `message`, `locale`               |
+| Validator          | Description                                                        |
+| :----------------- | :----------------------------------------------------------------- |
+| `zMelliCode`       | Validates Iranian National Code (Melli Code).                      |
+| `zShenaseMelli`    | Validates Legal Person ID (Company ID).                            |
+| `zCardNumber`      | Validates 16-digit bank card numbers (Luhn).                       |
+| `zIranianMobile`   | Validates Iranian mobile numbers.                                  |
+| `zSheba`           | Validates IBAN (Sheba) structure and checksum.                     |
+| `zPassport`        | Validates Iranian Passport numbers.                                |
+| `zPostalCode`      | Validates 10-digit Iranian postal codes.                           |
+| `zLandline`        | Validates landline phone numbers with area codes.                  |
+| `preprocessNumber` | Utility: Wraps any validator to convert Persian digits to English. |
 
 #### Options Interface
+
 All validators accept an optional configuration object to customize behavior.
 
 | Name         | Type                  | Description                                                |
 | :----------- | :-------------------- | :--------------------------------------------------------- |
 | `message`    | `string`              | Custom error message to display when validation fails.     |
 | `locale`     | `"fa"`, `"en"`        | Language for the default error message (defaults to "fa"). |
-| `strictZero` | `boolean`, `optional` | (Mobile Only) Indicates strictness of the leading zero.    |
+| `strictZero` | `boolean`, `optional` | (Mobile Only) If true, input must start with 0.            |
 
 ## License
 

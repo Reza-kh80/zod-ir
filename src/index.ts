@@ -1,17 +1,30 @@
 import { z } from "zod";
 import {
   isMelliCode,
+  isShenaseMelli,
+  isPassport,
   isCardNumber,
   isIranianMobile,
   isSheba,
   isPostalCode,
   isLandline,
+  verifyAndNormalize,
 } from "./utils";
 import { getMessage, BaseOptions } from "./constants";
 
 export const zMelliCode = (options?: BaseOptions) =>
   z.string().refine((val) => isMelliCode(val), {
     message: getMessage("melliCode", options),
+  });
+
+export const zShenaseMelli = (options?: BaseOptions) =>
+  z.string().refine((val) => isShenaseMelli(val), {
+    message: getMessage("shenaseMelli", options),
+  });
+
+export const zPassport = (options?: BaseOptions) =>
+  z.string().refine((val) => isPassport(val), {
+    message: getMessage("passport", options),
   });
 
 export const zCardNumber = (options?: BaseOptions) =>
@@ -48,11 +61,22 @@ export const zLandline = (options?: BaseOptions) =>
     message: getMessage("landline", options),
   });
 
+export const preprocessNumber = (schema: z.ZodTypeAny) =>
+  z.preprocess((val) => {
+    if (typeof val === "string") {
+      return verifyAndNormalize(val);
+    }
+    return val;
+  }, schema);
+
 export {
   isMelliCode,
+  isShenaseMelli,
+  isPassport,
   isCardNumber,
   isIranianMobile,
   isSheba,
   isPostalCode,
   isLandline,
+  verifyAndNormalize,
 };
