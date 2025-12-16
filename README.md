@@ -34,7 +34,8 @@
 - ✈️ **Passport:** Validates Iranian Passport numbers.
 - 📮 **Postal Code:** Validates 10-digit Iranian postal codes.
 - ☎️ **Landline:** Validates fixed line numbers with area codes.
-- 🔄 **Auto-fix Digits:** Helper to automatically convert Persian/Arabic digits to English.
+- 🔄 **Auto-fix Digits:** Automatically converts Persian/Arabic digits and characters (ي, ك) to standard format.
+- 🎨 **Metadata Extraction:** Extract **Bank Name/Color** from card numbers and **Operator Name** from mobiles.
 - 🌍 **Bilingual:** Built-in error messages in **Persian** and **English**.
 
 ---
@@ -100,7 +101,29 @@ try {
 }
 ```
 
-2. Usage with React Hook Form 📋
+2. Extracting Metadata (New ✨)
+   You can extract useful information like Bank Name, Brand Color, or Mobile Operator directly from your validated data.
+
+```typescript
+import { getBankInfo, getMobileOperator } from "zod-ir";
+
+// --- Bank Info ---
+const bank = getBankInfo("6037991155667788");
+if (bank) {
+  console.log(bank.name); // "Melli"
+  console.log(bank.label); // "ملی"
+  console.log(bank.color); // "#EF3F3E" (Great for UI backgrounds!)
+  console.log(bank.formatted); // "6037-9911-5566-7788"
+}
+
+// --- Mobile Operator ---
+const operator = getMobileOperator("09121234567");
+if (operator) {
+  console.log(operator.label); // "همراه اول"
+}
+```
+
+3. Usage with React Hook Form 📋
 
 ```typescript
 import { useForm } from "react-hook-form";
@@ -159,6 +182,14 @@ All validators accept an optional configuration object to customize behavior.
 | `message`    | `string`              | Custom error message to display when validation fails.     |
 | `locale`     | `"fa"`, `"en"`        | Language for the default error message (defaults to "fa"). |
 | `strictZero` | `boolean`, `optional` | (Mobile Only) If true, input must start with 0.            |
+
+## Metadata Helpers (New)
+
+| Function                    | Return Type                         | Description                                                        |
+| :-------------------------- | :---------------------------------- | ------------------------------------------------------------------ |
+| `getBankInfo(card)`         | `{ name, label, color, formatted }` | Returns bank details from card number.                             |
+| `getMobileOperator(mobile)` | `{ name, label }`                   | Returns operator (MCI, Irancell...) from mobile number.            |
+| `verifyAndNormalize(str)`   | `string`                            | Converts Persian/Arabic digits & chars (ي, ك) to standard English. |
 
 ## License
 

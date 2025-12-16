@@ -9,6 +9,8 @@ import {
   isPostalCode,
   isLandline,
   verifyAndNormalize,
+  getBankInfo,
+  getMobileOperator,
 } from "./utils";
 import { getMessage, BaseOptions } from "./constants";
 
@@ -79,4 +81,6 @@ export {
   isPostalCode,
   isLandline,
   verifyAndNormalize,
+  getBankInfo,
+  getMobileOperator,
 };

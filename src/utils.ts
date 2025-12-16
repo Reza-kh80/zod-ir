@@ -1,3 +1,93 @@
+import { BANKS, MOBILE_OPERATORS } from "./data";
+
+export function verifyAndNormalize(value: string): string {
+  if (!value) return "";
+
+  const PERSIAN_ZERO = 1776;
+  const PERSIAN_NINE = 1785;
+  const ARABIC_ZERO = 1632;
+  const ARABIC_NINE = 1641;
+
+  const ARABIC_YEH = 1610;
+  const PERSIAN_YE = 1740;
+  const ARABIC_KAF = 1603;
+  const PERSIAN_KE = 1705;
+
+  let result = "";
+
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    let char = value[i];
+
+    if (code >= PERSIAN_ZERO && code <= PERSIAN_NINE) {
+      char = String(code - PERSIAN_ZERO);
+    } else if (code >= ARABIC_ZERO && code <= ARABIC_NINE) {
+      char = String(code - ARABIC_ZERO);
+    } else if (code === ARABIC_YEH) {
+      char = String.fromCharCode(PERSIAN_YE);
+    } else if (code === ARABIC_KAF) {
+      char = String.fromCharCode(PERSIAN_KE);
+    }
+
+    result += char;
+  }
+
+  return result;
+}
+
+export type BankInfo = {
+  name: string;
+  label: string;
+  color: string;
+  formatted: string;
+} | null;
+
+export function getBankInfo(cardNumber: string): BankInfo {
+  const normalized = verifyAndNormalize(cardNumber).replace(/[\-\s]/g, "");
+
+  if (normalized.length < 6) return null;
+
+  const bin = normalized.substring(0, 6);
+  // @ts-ignore
+  const bank = BANKS[bin];
+
+  if (!bank) return null;
+
+  return {
+    ...bank,
+    formatted: normalized.replace(/(\d{4})(?=\d)/g, "$1-"),
+  };
+}
+
+export type OperatorInfo = {
+  name: string;
+  label: string;
+} | null;
+
+export function getMobileOperator(mobile: string): OperatorInfo {
+  const normalized = verifyAndNormalize(mobile);
+
+  let prefix = "";
+  if (normalized.startsWith("09")) {
+    prefix = normalized.substring(0, 4);
+  } else if (normalized.startsWith("9")) {
+    prefix = "0" + normalized.substring(0, 3);
+  } else if (normalized.startsWith("+98")) {
+    prefix = "0" + normalized.substring(3, 6);
+  }
+
+  if (prefix.length !== 4) return null;
+
+  for (const [key, op] of Object.entries(MOBILE_OPERATORS)) {
+    // @ts-ignore
+    if (op.prefixes.includes(prefix)) {
+      return { name: key, label: op.label };
+    }
+  }
+
+  return null;
+}
+
 export function isMelliCode(code: string): boolean {
   if (!/^\d{10}$/.test(code)) return false;
   if (/^(\d)\1+$/.test(code)) return false;
@@ -96,29 +186,4 @@ export function isPostalCode(code: string): boolean {
 
 export function isLandline(code: string): boolean {
   return /^0\d{2}\d{8}$/.test(code);
-}
-
-export function verifyAndNormalize(value: string): string {
-  const PERSIAN_ZERO = 1776;
-  const PERSIAN_NINE = 1785;
-
-  const ARABIC_ZERO = 1632;
-  const ARABIC_NINE = 1641;
-
-  let result = "";
-
-  for (let i = 0; i < value.length; i++) {
-    const code = value.charCodeAt(i);
-    let char = value[i];
-
-    if (code >= PERSIAN_ZERO && code <= PERSIAN_NINE) {
-      char = String(code - PERSIAN_ZERO);
-    } else if (code >= ARABIC_ZERO && code <= ARABIC_NINE) {
-      char = String(code - ARABIC_ZERO);
-    }
-
-    result += char;
-  }
-
-  return result;
 }
