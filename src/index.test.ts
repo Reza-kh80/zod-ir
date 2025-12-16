@@ -9,6 +9,7 @@ import {
   zPostalCode,
   zLandline,
   preprocessNumber,
+  verifyAndNormalize,
 } from "./index";
 
 describe("Zod Iranian Utils Tests", () => {
@@ -72,5 +73,26 @@ describe("Zod Iranian Utils Tests", () => {
     const result = schema.safeParse("۱۲۳۴۵۶۷۸۹۱");
     expect(result.success).toBe(true);
     if (result.success) expect(result.data).toBe("1234567891");
+  });
+});
+
+describe("Preprocess (Digits Normalization)", () => {
+  it("should convert Persian digits to English", () => {
+    const schema = preprocessNumber(zMelliCode());
+    const result = schema.safeParse("۱۲۳۴۵۶۷۸۹۱");
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data).toBe("1234567891");
+  });
+
+  it("should convert Arabic digits to English", () => {
+    const schema = preprocessNumber(zMelliCode());
+    const result = schema.safeParse("١٢٣٤٥٦۷۸۹۱");
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data).toBe("1234567891");
+  });
+
+  it("should keep English digits and other characters as is", () => {
+    const normalized = verifyAndNormalize("A-123-تست");
+    expect(normalized).toBe("A-123-تست");
   });
 });
