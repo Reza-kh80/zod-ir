@@ -1,6 +1,7 @@
 # Source files (if you only want to ship dist)
 src/
 public/
+assets/
 index.html
 
 # Config files
