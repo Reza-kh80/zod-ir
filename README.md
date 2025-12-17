@@ -185,11 +185,15 @@ All validators accept an optional configuration object to customize behavior.
 
 ## Metadata Helpers (New)
 
-| Function                    | Return Type                         | Description                                                        |
-| :-------------------------- | :---------------------------------- | ------------------------------------------------------------------ |
-| `getBankInfo(card)`         | `{ name, label, color, formatted }` | Returns bank details from card number.                             |
-| `getMobileOperator(mobile)` | `{ name, label }`                   | Returns operator (MCI, Irancell...) from mobile number.            |
-| `verifyAndNormalize(str)`   | `string`                            | Converts Persian/Arabic digits & chars (ي, ك) to standard English. |
+| Function                    | Return Type                               | Description                                                                    |
+| :-------------------------- | :---------------------------------------- | ------------------------------------------------------------------------------ |
+| `getBankInfo(card)`         | `{ name, label, color, logo, formatted }` | Returns bank details including **Logo URL** from card number.number.           |
+| `getMobileOperator(mobile)` | `{ name, label, logo }`                   | Returns operator (MCI, Irancell...) including **Logo URL** from mobile number. |
+| `verifyAndNormalize(str)`   | `string`                                  | Converts Persian/Arabic digits & chars (ي, ك) to standard English.             |
+
+## Credits 🙏
+
+- Bank and Operator logos are courtesy of [Zegond's Logos Project](https://github.com/zegond).
 
 ## License
 
