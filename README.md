@@ -191,6 +191,14 @@ All validators accept an optional configuration object to customize behavior.
 | `getMobileOperator(mobile)` | `{ name, label, logo }`                   | Returns operator (MCI, Irancell...) including **Logo URL** from mobile number. |
 | `verifyAndNormalize(str)`   | `string`                                  | Converts Persian/Arabic digits & chars (ي, ك) to standard English.             |
 
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+
+This project uses PNPM. To get started, clone the repo and run:
+```bash
+pnpm install
+```
+
 ## Credits 🙏
 
 - Bank and Operator logos are courtesy of [Zegond's Logos Project](https://github.com/zegond).
