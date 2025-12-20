@@ -23,6 +23,11 @@ import {
   getBillInfo,
   type BillInfo,
 } from "./modules/bill";
+import {
+  isJalaliDate,
+  getJalaliDateInfo,
+  type JalaliDateInfo,
+} from "./modules/date";
 
 export const zMelliCode = (options?: BaseOptions) =>
   z.string().refine((val) => isMelliCode(val), {
@@ -86,6 +91,11 @@ export const zPlateNumber = (options?: BaseOptions) =>
     message: getMessage("plateNumber", options),
   });
 
+export const zJalaliDate = (options?: BaseOptions) =>
+  z.string().refine((val) => isJalaliDate(val), {
+    message: getMessage("date", options),
+  });
+
 export const preprocessNumber = (schema: z.ZodTypeAny) =>
   z.preprocess((val) => {
     if (typeof val === "string") {
@@ -111,6 +121,9 @@ export {
   isBillIdValid,
   isPaymentIdValid,
   getBillInfo,
+  isJalaliDate,
+  getJalaliDateInfo,
+  type JalaliDateInfo,
   type BankInfo,
   type OperatorInfo,
   type BillInfo,

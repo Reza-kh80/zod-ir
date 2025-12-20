@@ -11,6 +11,7 @@ export const ERROR_MESSAGES = {
     billId: "شناسه قبض نامعتبر است",
     paymentId: "شناسه پرداخت نامعتبر است",
     plateNumber: "پلاک خودرو نامعتبر است",
+    date: "تاریخ وارد شده نامعتبر است"
   },
   en: {
     melliCode: "Invalid national code",
@@ -24,6 +25,7 @@ export const ERROR_MESSAGES = {
     billId: "Invalid Bill ID",
     paymentId: "Invalid Payment ID",
     plateNumber: "Invalid License Plate",
+    date: "Invalid Date"
   },
 } as const;
 
