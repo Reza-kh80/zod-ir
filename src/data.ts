@@ -1,6 +1,6 @@
 const CDN_BANKS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/banks";
 const CDN_OPERATORS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/operators";
-const CDN_BILLS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/bills";
+const CDN_BILLS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/bills"; 
 
 export const BANKS = {
   "603799": { name: "Melli", label: "ملی", color: "#EF3F3E", logo: `${CDN_BANKS}/melli.svg` },
@@ -65,6 +65,7 @@ export const MOBILE_OPERATORS = {
   },
 } as const;
 
+// مالیات حذف شد
 export const BILL_TYPES = {
   1: { label: "آب", type: "water", color: "#00a8ff", logo: `${CDN_BILLS}/water.svg` },
   2: { label: "برق", type: "electricity", color: "#fbc531", logo: `${CDN_BILLS}/electricity.svg` },
@@ -72,6 +73,5 @@ export const BILL_TYPES = {
   4: { label: "تلفن ثابت", type: "phone", color: "#273c75", logo: `${CDN_BILLS}/phone.svg` },
   5: { label: "تلفن همراه", type: "mobile", color: "#8c7ae6", logo: `${CDN_BILLS}/mobile.svg` },
   6: { label: "عوارض شهرداری", type: "municipality", color: "#44bd32", logo: `${CDN_BILLS}/municipality.svg` },
-  8: { label: "سازمان مالیات", type: "tax", color: "#718093", logo: `${CDN_BILLS}/tax.svg` },
   9: { label: "جرایم رانندگی", type: "traffic", color: "#c23616", logo: `${CDN_BILLS}/traffic.svg` },
 } as const;

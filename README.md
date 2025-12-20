@@ -29,13 +29,15 @@
 - ✅ **National Code:** Validates using the official checksum algorithm.
 - 🏢 **Shenase Melli:** Validates Legal Person ID (Company ID).
 - 💳 **Bank Card:** Validates 16-digit card numbers (Luhn algorithm).
+- 🚗 **License Plate:** Validates Iranian car plates and **Detects City/Province**.
+- 🧾 **Bill & Payment ID:** Validates Utility Bills (Water, Electricity, Gas, etc.) and **Calculates Amount**.
 - 📱 **Mobile Number:** Validates `09xx`, `+989xx`, `9xx`.
 - 🏦 **Sheba (IBAN):** Validates structure and checksum (ISO 7064).
 - ✈️ **Passport:** Validates Iranian Passport numbers.
 - 📮 **Postal Code:** Validates 10-digit Iranian postal codes.
 - ☎️ **Landline:** Validates fixed line numbers with area codes.
-- 🔄 **Auto-fix Digits:** Automatically converts Persian/Arabic digits and characters (ي, ك) to standard format.
-- 🎨 **Metadata Extraction:** Extract **Bank Name/Color** from card numbers and **Operator Name** from mobiles.
+- 🔄 **Auto-fix Digits:** Automatically converts Persian/Arabic digits and characters (ي, ك) to standard English.
+- 🎨 **Metadata Extraction:** Extract **Bank Name/Color/Logo**, **Operator**, **Bill Type**, and **Plate Location**.
 - 🌍 **Bilingual:** Built-in error messages in **Persian** and **English**.
 
 ---
@@ -44,6 +46,8 @@
 
 ```bash
 npm install zod zod-ir
+# or
+pnpm add zod zod-ir
 # or
 yarn add zod zod-ir
 ```
@@ -57,11 +61,11 @@ yarn add zod zod-ir
 import { z } from "zod";
 import {
   zMelliCode,
-  zShenaseMelli,
   zIranianMobile,
   zCardNumber,
-  zSheba,
-  zPassport,
+  zBillId,
+  zPaymentId,
+  zPlateNumber,
   preprocessNumber,
 } from "zod-ir";
 
@@ -69,57 +73,55 @@ const UserSchema = z.object({
   // 1. National Code with Auto-Fix (Converts ۱۲۳ -> 123)
   nationalCode: preprocessNumber(zMelliCode()),
 
-  // 2. Company ID (Shenase Melli)
-  companyId: zShenaseMelli({ message: "شناسه ملی نامعتبر است" }),
-
-  // 3. Mobile (Strict Mode: Must start with 0)
+  // 2. Mobile (Strict Mode: Must start with 0)
   mobile: zIranianMobile({ strictZero: true }),
 
-  // 4. Bank Card
+  // 3. Bank Card
   card: zCardNumber(),
 
-  // 5. Sheba (IBAN) - English Error
-  iban: zSheba({ locale: "en" }),
+  // 4. Car Plate (e.g., 12B345-11 or ۱۲ب۳۴۵-۱۱)
+  plate: zPlateNumber(),
 
-  // 6. Passport
-  passport: zPassport(),
+  // 5. Bill & Payment ID
+  billId: zBillId(),
+  paymentId: zPaymentId(),
 });
-
-// Example Usage
-try {
-  const result = UserSchema.parse({
-    nationalCode: "۱۲۳۴۵۶۷۸۹۱", // User typed in Farsi
-    companyId: "10100448712",
-    mobile: "09121234567",
-    card: "6362147010005732",
-    iban: "IR330620000000202901868005",
-    passport: "A12345678",
-  });
-  console.log("Valid Data:", result);
-} catch (err) {
-  console.log(err);
-}
 ```
 
 2. Extracting Metadata (New ✨)
-   You can extract useful information like Bank Name, Brand Color, or Mobile Operator directly from your validated data.
+   You can extract useful information like Bank Name, Color, Bill Type, Amount, or Plate Location.
 
 ```typescript
-import { getBankInfo, getMobileOperator } from "zod-ir";
+import {
+  getBankInfo,
+  getMobileOperator,
+  getBillInfo,
+  getPlateInfo,
+} from "zod-ir";
 
-// --- Bank Info ---
+// 🏦 Bank Info
 const bank = getBankInfo("6037991155667788");
 if (bank) {
   console.log(bank.name); // "Melli"
   console.log(bank.label); // "ملی"
   console.log(bank.color); // "#EF3F3E" (Great for UI backgrounds!)
-  console.log(bank.formatted); // "6037-9911-5566-7788"
+  console.log(bank.logo); // URL to bank logo
 }
 
-// --- Mobile Operator ---
-const operator = getMobileOperator("09121234567");
-if (operator) {
-  console.log(operator.label); // "همراه اول"
+// 🚗 Plate Info
+const plate = getPlateInfo("64م322-23");
+if (plate) {
+  console.log(plate.province); // "اصفهان"
+  console.log(plate.city); // "نایین"
+}
+
+// 🧾 Bill Info (Water, Electricity, Gas...)
+// Returns bill type, validity, and calculates amount from payment ID
+const bill = getBillInfo("9006117002129", "60240335");
+if (bill) {
+  console.log(bill.type.label); // "برق"
+  console.log(bill.formattedAmount); // "602,000" (Rials)
+  console.log(bill.isValid); // true
 }
 ```
 
@@ -171,6 +173,9 @@ export default function MyForm() {
 | `zPassport`        | Validates Iranian Passport numbers.                                |
 | `zPostalCode`      | Validates 10-digit Iranian postal codes.                           |
 | `zLandline`        | Validates landline phone numbers with area codes.                  |
+| `zBillId`          | Validates Bill ID (Shenase Ghabz).                                 |
+| `zPaymentId`       | Validates Payment ID (Shenase Pardakht).                           |
+| `zPlateNumber`     | Validates Vehicle License Plate.                                   |
 | `preprocessNumber` | Utility: Wraps any validator to convert Persian digits to English. |
 
 #### Options Interface
@@ -185,16 +190,20 @@ All validators accept an optional configuration object to customize behavior.
 
 ## Metadata Helpers (New)
 
-| Function                    | Return Type                               | Description                                                                    |
-| :-------------------------- | :---------------------------------------- | ------------------------------------------------------------------------------ |
-| `getBankInfo(card)`         | `{ name, label, color, logo, formatted }` | Returns bank details including **Logo URL** from card number.number.           |
-| `getMobileOperator(mobile)` | `{ name, label, logo }`                   | Returns operator (MCI, Irancell...) including **Logo URL** from mobile number. |
-| `verifyAndNormalize(str)`   | `string`                                  | Converts Persian/Arabic digits & chars (ي, ك) to standard English.             |
+| Function                     | Return Type                                  | Description                                                                    |
+| :--------------------------- | :------------------------------------------- | ------------------------------------------------------------------------------ |
+| `getBankInfo(card)`          | `{ name, label, color, logo, formatted }`    | Returns bank details including **Logo URL** from card number.number.           |
+| `getMobileOperator(mobile)`  | `{ name, label, logo }`                      | Returns operator (MCI, Irancell...) including **Logo URL** from mobile number. |
+| `getBillInfo(billId, payId)` | `{ type, amount, formattedAmount, isValid }` | Bill type (Water/Gas...), calculates amount. number.                           |
+| `getPlateInfo(plate)`        | `{ province, city }`                         | Province and City of the plate. number.                                        |
+| `verifyAndNormalize(str)`    | `string`                                     | Converts Persian/Arabic digits & chars (ي, ك) to standard English.             |
 
 ## Contributing
+
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
 This project uses PNPM. To get started, clone the repo and run:
+
 ```bash
 pnpm install
 ```

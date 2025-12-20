@@ -99,18 +99,14 @@ function calculateBillCheckDigit(code: string): number {
     weight++;
     if (weight > 7) weight = 2;
   }
-
   const remainder = sum % 11;
-
   if (remainder === 0 || remainder === 1) return 0;
-
   return 11 - remainder;
 }
 
 export function isBillIdValid(billId: string): boolean {
   const normalized = verifyAndNormalize(billId);
   if (!/^\d{6,13}$/.test(normalized)) return false;
-
   const checkDigit = parseInt(normalized.slice(-1));
   const core = normalized.slice(0, -1);
   return calculateBillCheckDigit(core) === checkDigit;
@@ -120,19 +116,14 @@ export function isPaymentIdValid(paymentId: string, billId: string): boolean {
   const nPay = verifyAndNormalize(paymentId);
   const nBill = verifyAndNormalize(billId);
 
-  if (!/^\d{6,13}$/.test(nPay)) return false;
-  if (!/^\d{6,13}$/.test(nBill)) return false;
+  if (!/^\d{6,13}$/.test(nPay) || !/^\d{6,13}$/.test(nBill)) return false;
 
   const payCheckDigit1 = parseInt(nPay.slice(-2, -1));
   const payCore1 = nPay.slice(0, -2);
-
-  if (calculateBillCheckDigit(payCore1) !== payCheckDigit1) {
-    return false;
-  }
+  if (calculateBillCheckDigit(payCore1) !== payCheckDigit1) return false;
 
   const payCheckDigit2 = parseInt(nPay.slice(-1));
   const combinedCore = nBill + nPay.slice(0, -1);
-
   return calculateBillCheckDigit(combinedCore) === payCheckDigit2;
 }
 
@@ -146,11 +137,17 @@ export type BillInfo = {
 export function getBillInfo(billId: string, paymentId?: string): BillInfo {
   const nBill = verifyAndNormalize(billId);
 
-  if (nBill.length < 6) return null;
+  // محدودیت طول برای جلوگیری از اشتباه با کدهای ۳۰ رقمی مالیاتی
+  if (nBill.length < 6 || nBill.length > 13) return null;
 
   const typeDigit = parseInt(nBill.slice(-2, -1));
   // @ts-ignore
-  const typeInfo = BILL_TYPES[typeDigit] || { label: "نامشخص", slug: "unknown", color: "#333", logo: "" };
+  const typeInfo = BILL_TYPES[typeDigit] || {
+    label: "نامشخص",
+    slug: "unknown",
+    color: "#333",
+    logo: "",
+  };
 
   let amount = 0;
   let formattedAmount = "0";
@@ -162,6 +159,7 @@ export function getBillInfo(billId: string, paymentId?: string): BillInfo {
     if (!isPaymentIdValid(nPay, nBill)) {
       isValid = false;
     } else {
+      // حذف ۵ رقم آخر برای محاسبه مبلغ
       const amountCore = nPay.slice(0, -5);
       if (amountCore.length > 0) {
         amount = parseInt(amountCore) * 1000;
@@ -193,13 +191,16 @@ export function getPlateInfo(plate: string): PlateInfo {
     const codeEntry = provinceData.codes.find((c) => {
       const codeStr = c.code;
       if (codeStr.includes(",")) {
-        return codeStr.split(",").map(x => x.trim()).includes(cityCode);
+        return codeStr
+          .split(",")
+          .map((x) => x.trim())
+          .includes(cityCode);
       }
       return codeStr === cityCode;
     });
 
     if (codeEntry) {
-      const cityDetail = codeEntry.details.find(d => {
+      const cityDetail = codeEntry.details.find((d) => {
         return d.letters.includes(letter) || d.letters.includes("تمام حروف");
       });
 
@@ -207,7 +208,7 @@ export function getPlateInfo(plate: string): PlateInfo {
         return {
           province: provinceData.province,
           city: cityDetail.city,
-          isValid: true
+          isValid: true,
         };
       }
     }
