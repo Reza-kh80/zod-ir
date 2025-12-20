@@ -258,47 +258,46 @@ export const MOBILE_OPERATORS = {
   },
 } as const;
 
-// مالیات حذف شد
 export const BILL_TYPES = {
   1: {
     label: "آب",
-    type: "water",
+    slug: "water",
     color: "#00a8ff",
     logo: `${CDN_BILLS}/water.svg`,
   },
   2: {
     label: "برق",
-    type: "electricity",
+    slug: "electricity",
     color: "#fbc531",
     logo: `${CDN_BILLS}/electricity.svg`,
   },
   3: {
     label: "گاز",
-    type: "gas",
+    slug: "gas",
     color: "#e84118",
     logo: `${CDN_BILLS}/gas.svg`,
   },
   4: {
     label: "تلفن ثابت",
-    type: "phone",
+    slug: "phone",
     color: "#273c75",
     logo: `${CDN_BILLS}/phone.svg`,
   },
   5: {
     label: "تلفن همراه",
-    type: "mobile",
+    slug: "mobile",
     color: "#8c7ae6",
     logo: `${CDN_BILLS}/mobile.svg`,
   },
   6: {
     label: "عوارض شهرداری",
-    type: "municipality",
+    slug: "municipality",
     color: "#44bd32",
     logo: `${CDN_BILLS}/municipality.svg`,
   },
   9: {
     label: "جرایم رانندگی",
-    type: "traffic",
+    slug: "traffic",
     color: "#c23616",
     logo: `${CDN_BILLS}/traffic.svg`,
   },
