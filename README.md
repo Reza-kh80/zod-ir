@@ -1,6 +1,5 @@
 <div align="center">
   <img src="zod-ir-logo.png" width="250"  alt="zod-ir logo" style="border-radius: 20px !important" />
-  <h1>zod-ir</h1>
   <p>
     <strong>The Ultimate Zod Extension for Iranian Data Structures</strong>
   </p>
