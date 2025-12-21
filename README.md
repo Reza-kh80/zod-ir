@@ -1,44 +1,44 @@
 <div align="center">
+  <img src="zod-ir-logo.png" width="120" alt="zod-ir logo" style="border-radius: 15px" />
   <h1>zod-ir</h1>
   <p>
-    <strong>Comprehensive Zod validations for Iranian data structures</strong>
+    <strong>The Ultimate Zod Extension for Iranian Data Structures</strong>
   </p>
   <p>
-    A lightweight, TypeScript-first extension for Zod.
+    Validation for National Code, Bank Cards, Sheba, Bills, License Plates, Crypto, and more.
     <br />
-    Compatible with React Hook Form, Next.js, NestJS, and Node.js.
+    Lightweight. Zero Dependencies. Type-Safe.
   </p>
   
   <p>
     <a href="https://www.npmjs.com/package/zod-ir">
-      <img src="https://img.shields.io/npm/v/zod-ir?style=flat-square&color=blue" alt="npm version" />
+      <img src="https://img.shields.io/npm/v/zod-ir?style=flat-square&color=3b82f6" alt="npm version" />
     </a>
     <a href="https://bundlephobia.com/result?p=zod-ir">
-      <img src="https://img.shields.io/bundlephobia/minzip/zod-ir?style=flat-square&color=green" alt="bundle size" />
+      <img src="https://img.shields.io/bundlephobia/minzip/zod-ir?style=flat-square&color=10b981" alt="bundle size" />
     </a>
     <a href="https://github.com/Reza-kh80/zod-ir/blob/main/LICENSE">
-      <img src="https://img.shields.io/npm/l/zod-ir?style=flat-square&color=orange" alt="license" />
+      <img src="https://img.shields.io/npm/l/zod-ir?style=flat-square&color=f59e0b" alt="license" />
     </a>
   </p>
 </div>
 
 <hr />
 
-## Features ✨
+## Why zod-ir? 🚀
 
-- ✅ **National Code:** Validates using the official checksum algorithm.
-- 🏢 **Shenase Melli:** Validates Legal Person ID (Company ID).
-- 💳 **Bank Card:** Validates 16-digit card numbers (Luhn algorithm).
-- 🚗 **License Plate:** Validates Iranian car plates and **Detects City/Province**.
-- 🧾 **Bill & Payment ID:** Validates Utility Bills (Water, Electricity, Gas, etc.) and **Calculates Amount**.
-- 📱 **Mobile Number:** Validates `09xx`, `+989xx`, `9xx`.
-- 🏦 **Sheba (IBAN):** Validates structure and checksum (ISO 7064).
-- ✈️ **Passport:** Validates Iranian Passport numbers.
-- 📮 **Postal Code:** Validates 10-digit Iranian postal codes.
-- ☎️ **Landline:** Validates fixed line numbers with area codes.
-- 🔄 **Auto-fix Digits:** Automatically converts Persian/Arabic digits and characters (ي, ك) to standard English.
-- 🎨 **Metadata Extraction:** Extract **Bank Name/Color/Logo**, **Operator**, **Bill Type**, and **Plate Location**.
-- 🌍 **Bilingual:** Built-in error messages in **Persian** and **English**.
+Building forms in Iran requires specific validations (National Code algorithm, Bank Card Luhn, etc.). `zod-ir` brings these natively into **Zod**, with added superpowers like **Metadata Extraction** (Bank Names, Logos, Bill Types).
+
+### Key Features ✨
+
+- 🧠 **Smart Financial Validation:** Auto-detects **Card Number** vs **Sheba (IBAN)** and returns Bank Info & Logo.
+- 📅 **Jalali Date (Solar Hijri):** Validates Persian dates with precise **Leap Year (Kabise)** calculation.
+- 💎 **Crypto Support:** Validates **TRC20 (Tether)**, **ERC20**, and **Bitcoin** addresses.
+- 💳 **Banking:** Validates Card Numbers & Sheba (ISO 7064).
+- 🚗 **Vehicle:** Validates License Plates and detects **Province/City**.
+- 🧾 **Utility Bills:** Validates Bill ID/Payment ID and calculates the **Amount**.
+- 🆔 **Identity:** National Code (Melli Code), Legal Person ID (Shenase Melli), Passport.
+- 📱 **Contact:** Mobile (MCI, Irancell...), Landline, Postal Code.
 
 ---
 
@@ -52,10 +52,91 @@ pnpm add zod zod-ir
 yarn add zod zod-ir
 ```
 
-## Usage 🚀
+## Usage Examples 💡
 
-1. Basic Validation & Auto-Fix
-   This example shows how to validate a form and automatically convert Persian digits (e.g., ۰۹۱۲) to English.
+1. Smart Financial Validation (New 🌟)
+
+   Don't ask users for "Card" or "Sheba" separately. Use zFinancial to accept both!
+
+```typescript
+import { z } from "zod";
+import { zFinancial, getFinancialInfo } from "zod-ir";
+
+// 1. Validation Schema
+const schema = z.object({
+  destination: zFinancial({ message: "Invalid Card or Sheba" }),
+});
+
+// 2. Extract Metadata (Bank Name, Logo, Type)
+const info = getFinancialInfo("6037991155667788");
+// OR
+const infoSheba = getFinancialInfo("IR120170000000123456789012");
+
+console.log(info);
+/* Output:
+{
+  type: "card", // or "sheba"
+  isValid: true,
+  bank: {
+    name: "Melli",
+    label: "ملی",
+    color: "#EF3F3E",
+    logo: "https://.../melli.svg",
+    formatted: "6037-9911-..."
+  }
+}
+*/
+```
+
+2. Crypto Wallet Validation (New 💎)
+
+   Perfect for Fintech and Exchange apps. Supports TRC20 (USDT), ERC20, and BTC.
+
+```typescript
+import { zCrypto, getCryptoInfo } from "zod-ir";
+
+const schema = z.object({
+  // Accept any valid wallet (TRX, ETH, BTC)
+  anyWallet: zCrypto(),
+
+  // Strict: Accept ONLY Tether (TRC20)
+  usdtWallet: zCrypto({
+    ticker: "TRX",
+    message: "Only TRC20 addresses allowed",
+  }),
+});
+
+const details = getCryptoInfo("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+/* Output:
+{
+  ticker: "TRX",
+  network: "TRC20",
+  isValid: true
+}
+*/
+```
+
+3. Jalali Date Validation (New 📅)
+
+   Validates Persian dates mathematically (checking days in month & leap years).
+
+```typescript
+import { zJalaliDate } from "zod-ir";
+
+const schema = z.object({
+  birthDate: zJalaliDate({ message: "Invalid date" }),
+});
+
+// ✅ Valid (Leap year)
+schema.parse({ birthDate: "1403/12/30" });
+
+// ❌ Invalid (1402 is not a leap year)
+schema.parse({ birthDate: "1402/12/30" });
+```
+
+4. Comprehensive Form Example
+
+   A full registration form handling Auto-fix (Persian digits), Mobile, and National Code.
 
 ```typescript
 import { z } from "zod";
@@ -66,146 +147,67 @@ import {
   zBillId,
   zPaymentId,
   zPlateNumber,
-  preprocessNumber,
+  preprocessNumber, // Converts ۱۲۳ -> 123
 } from "zod-ir";
 
 const UserSchema = z.object({
-  // 1. National Code with Auto-Fix (Converts ۱۲۳ -> 123)
+  // Auto-convert Persian digits before validation
   nationalCode: preprocessNumber(zMelliCode()),
 
-  // 2. Mobile (Strict Mode: Must start with 0)
   mobile: zIranianMobile({ strictZero: true }),
-
-  // 3. Bank Card
   card: zCardNumber(),
+  plate: zPlateNumber(), // e.g. 12م345-11
 
-  // 4. Car Plate (e.g., 12B345-11 or ۱۲ب۳۴۵-۱۱)
-  plate: zPlateNumber(),
-
-  // 5. Bill & Payment ID
+  // Utility Bill
   billId: zBillId(),
   paymentId: zPaymentId(),
 });
 ```
 
-2. Extracting Metadata (New ✨)
-   You can extract useful information like Bank Name, Color, Bill Type, Amount, or Plate Location.
+## Metadata Helpers 🛠️
 
-```typescript
-import {
-  getBankInfo,
-  getMobileOperator,
-  getBillInfo,
-  getPlateInfo,
-} from "zod-ir";
-
-// 🏦 Bank Info
-const bank = getBankInfo("6037991155667788");
-if (bank) {
-  console.log(bank.name); // "Melli"
-  console.log(bank.label); // "ملی"
-  console.log(bank.color); // "#EF3F3E" (Great for UI backgrounds!)
-  console.log(bank.logo); // URL to bank logo
-}
-
-// 🚗 Plate Info
-const plate = getPlateInfo("64م322-23");
-if (plate) {
-  console.log(plate.province); // "اصفهان"
-  console.log(plate.city); // "نایین"
-}
-
-// 🧾 Bill Info (Water, Electricity, Gas...)
-// Returns bill type, validity, and calculates amount from payment ID
-const bill = getBillInfo("9006117002129", "60240335");
-if (bill) {
-  console.log(bill.type.label); // "برق"
-  console.log(bill.formattedAmount); // "602,000" (Rials)
-  console.log(bill.isValid); // true
-}
-```
-
-3. Usage with React Hook Form 📋
-
-```typescript
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { zMelliCode, preprocessNumber } from "zod-ir";
-
-const schema = z.object({
-  // Automatically fixes Persian digits typed by user
-  nationalId: preprocessNumber(zMelliCode({ message: "کد ملی صحیح نیست" })),
-});
-
-export default function MyForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  return (
-    <form onSubmit={handleSubmit((d) => console.log(d))}>
-      <input
-        {...register("nationalId")}
-        placeholder="کد ملی (حتی فارسی)"
-        dir="auto"
-      />
-      <p style={{ color: "red" }}>{errors.nationalId?.message}</p>
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
-```
+zod-ir isn't just for validation. It provides rich metadata for your UI.
+| Function | Return Type | Description |
+| :--------------------------- | :------------------------------------------- | ------------------------------------------------------------------------------ |
+| `getFinancialInfo(val)` | `{ type, bank, isValid }` | Smart! Detects Card or Sheba, returns Bank Logo/Color. |
+| `getBankInfo(card)` | `{ name, label, logo... }` | Details for Card Numbers. |
+| `getCryptoInfo(addr)` | `{ ticker, network }` | Detects TRC20, ERC20, BTC networks. |
+| `getMobileOperator(num)` | `{ name, label, logo }` | Returns Operator (MCI, Irancell...) & Logo. |
+| `getBillInfo(id, payId)` | `{ type, amount... }` | Bill Type (Water/Gas), Amount calculation, Validity. |
+| `getPlateInfo(plate)` | `{ province, city }` | Province and City of the license plate. |
+| `getJalaliDateInfo(date)` | `{ year, month, isLeap }` | Deconstructs Jalali date & checks leap year. |
 
 ## API Reference 📚
 
-| Validator          | Description                                                        |
+Identity & Contact
+| Validator | Description |
 | :----------------- | :----------------------------------------------------------------- |
-| `zMelliCode`       | Validates Iranian National Code (Melli Code).                      |
-| `zShenaseMelli`    | Validates Legal Person ID (Company ID).                            |
-| `zCardNumber`      | Validates 16-digit bank card numbers (Luhn).                       |
-| `zIranianMobile`   | Validates Iranian mobile numbers.                                  |
-| `zSheba`           | Validates IBAN (Sheba) structure and checksum.                     |
-| `zPassport`        | Validates Iranian Passport numbers.                                |
-| `zPostalCode`      | Validates 10-digit Iranian postal codes.                           |
-| `zLandline`        | Validates landline phone numbers with area codes.                  |
-| `zBillId`          | Validates Bill ID (Shenase Ghabz).                                 |
-| `zPaymentId`       | Validates Payment ID (Shenase Pardakht).                           |
-| `zPlateNumber`     | Validates Vehicle License Plate.                                   |
-| `preprocessNumber` | Utility: Wraps any validator to convert Persian digits to English. |
+| `zMelliCode` | National Code (Code Melli) |
+| `zShenaseMelli` | Legal Person ID (Company) |
+| `zPassport` | Iranian Passport |
+| `zIranianMobile` | Mobile (09xx, +989xx) |
+| `zPostalCode` | 10-digit Postal Code |
 
-#### Options Interface
-
-All validators accept an optional configuration object to customize behavior.
-
-| Name         | Type                  | Description                                                |
-| :----------- | :-------------------- | :--------------------------------------------------------- |
-| `message`    | `string`              | Custom error message to display when validation fails.     |
-| `locale`     | `"fa"`, `"en"`        | Language for the default error message (defaults to "fa"). |
-| `strictZero` | `boolean`, `optional` | (Mobile Only) If true, input must start with 0.            |
-
-## Metadata Helpers (New)
-
-| Function                     | Return Type                                  | Description                                                                    |
-| :--------------------------- | :------------------------------------------- | ------------------------------------------------------------------------------ |
-| `getBankInfo(card)`          | `{ name, label, color, logo, formatted }`    | Returns bank details including **Logo URL** from card number.number.           |
-| `getMobileOperator(mobile)`  | `{ name, label, logo }`                      | Returns operator (MCI, Irancell...) including **Logo URL** from mobile number. |
-| `getBillInfo(billId, payId)` | `{ type, amount, formattedAmount, isValid }` | Bill type (Water/Gas...), calculates amount. number.                           |
-| `getPlateInfo(plate)`        | `{ province, city }`                         | Province and City of the plate. number.                                        |
-| `verifyAndNormalize(str)`    | `string`                                     | Converts Persian/Arabic digits & chars (ي, ك) to standard English.             |
+Financial & Assets
+| Validator | Description |
+| :----------------- | :----------------------------------------------------------------- |
+| `zFinancial` | Smart Input (Card OR Sheba) |
+| `zCardNumber` | Bank Card Number (16 digits) |
+| `zSheba` | IBAN (Sheba) |
+| `zCrypto` | Crypto Wallet (TRX, ETH, BTC) |
+| `zBillId` | Utility Bill ID |
+| `zPaymentId` | Utility Payment ID |
+| `zPlateNumber` | Vehicle License Plate |
+| `zJalaliDate` | Persian Date (YYYY/MM/DD) |
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-This project uses PNPM. To get started, clone the repo and run:
+Contributions are welcome! This project uses PNPM.
 
 ```bash
+git clone https://github.com/Reza-kh80/zod-ir.git
 pnpm install
+pnpm test
 ```
 
 ## Credits 🙏
