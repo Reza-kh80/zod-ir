@@ -2,6 +2,10 @@ import { z } from "zod";
 import { verifyAndNormalize } from "./utils/helpers";
 import { getMessage, BaseOptions } from "./locales";
 
+interface CryptoOptions extends BaseOptions {
+  ticker?: "TRX" | "ETH" | "BTC";
+}
+
 import { isMelliCode, isShenaseMelli, isPassport } from "./modules/identity";
 import {
   isCardNumber,
@@ -31,6 +35,11 @@ import {
   getJalaliDateInfo,
   type JalaliDateInfo,
 } from "./modules/date";
+import {
+  isCryptoAddress,
+  getCryptoInfo,
+  type CryptoInfo,
+} from "./modules/crypto";
 
 export const zMelliCode = (options?: BaseOptions) =>
   z.string().refine((val) => isMelliCode(val), {
@@ -104,6 +113,11 @@ export const zFinancial = (options?: BaseOptions) =>
     message: getMessage("financial", options),
   });
 
+export const zCrypto = (options?: CryptoOptions) =>
+  z.string().refine((val) => isCryptoAddress(val, options?.ticker), {
+    message: getMessage("crypto", options),
+  });
+
 export const preprocessNumber = (schema: z.ZodTypeAny) =>
   z.preprocess((val) => {
     if (typeof val === "string") {
@@ -133,6 +147,9 @@ export {
   getJalaliDateInfo,
   getFinancialInfo,
   isFinancialValue,
+  isCryptoAddress,
+  getCryptoInfo,
+  type CryptoInfo,
   type JalaliDateInfo,
   type BankInfo,
   type OperatorInfo,

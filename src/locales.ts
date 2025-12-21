@@ -12,7 +12,8 @@ export const ERROR_MESSAGES = {
     paymentId: "شناسه پرداخت نامعتبر است",
     plateNumber: "پلاک خودرو نامعتبر است",
     date: "تاریخ وارد شده نامعتبر است",
-    financial: "شماره کارت یا شبا معتبر نیست"
+    financial: "شماره کارت یا شبا معتبر نیست",
+    crypto: "آدرس کیف پول معتبر نیست"
   },
   en: {
     melliCode: "Invalid national code",
@@ -27,7 +28,8 @@ export const ERROR_MESSAGES = {
     paymentId: "Invalid Payment ID",
     plateNumber: "Invalid License Plate",
     date: "Invalid Date",
-    financial: "Invalid Sheba (IBAN) number or card number"
+    financial: "Invalid Sheba (IBAN) number or card number",
+    crypto: "Invalid Wallet address"
   },
 } as const;
 
