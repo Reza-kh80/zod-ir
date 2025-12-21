@@ -11,15 +11,19 @@ export type BankInfo = {
 
 export function getBankInfo(cardNumber: string): BankInfo {
   const normalized = verifyAndNormalize(cardNumber).replace(/[\-\s]/g, "");
-  if (normalized.length < 6) return null;
-  const bin = normalized.substring(0, 6);
-  // @ts-ignore
-  const bank = BANKS[bin];
-  if (!bank) return null;
-  return {
-    ...bank,
-    formatted: normalized.replace(/(\d{4})(?=\d)/g, "$1-"),
-  };
+
+  if (normalized.length >= 6) {
+    const bin = normalized.substring(0, 6);
+    // @ts-ignore
+    const bank = BANKS[bin];
+    if (bank) {
+      return {
+        ...bank,
+        formatted: normalized.replace(/(\d{4})(?=\d)/g, "$1-"),
+      };
+    }
+  }
+  return null;
 }
 
 export function isCardNumber(code: string): boolean {
@@ -56,4 +60,44 @@ export function isSheba(code: string): boolean {
   } catch {
     return false;
   }
+}
+
+export type FinancialInfo = {
+  type: "card" | "sheba" | "unknown";
+  value: string;
+  isValid: boolean;
+  bank: BankInfo;
+} | null;
+
+export function getFinancialInfo(value: string): FinancialInfo {
+  const normalized = verifyAndNormalize(value).replace(/[\-\s]/g, "");
+
+  if (normalized.toUpperCase().startsWith("IR")) {
+    const isValid = isSheba(normalized);
+    return {
+      type: "sheba",
+      value: normalized.toUpperCase(),
+      isValid,
+      bank: null,
+    };
+  }
+
+  if (/^\d{6,16}$/.test(normalized)) {
+    const isValid = isCardNumber(normalized);
+    const bank = getBankInfo(normalized);
+
+    return {
+      type: "card",
+      value: normalized,
+      isValid,
+      bank,
+    };
+  }
+
+  return { type: "unknown", value: normalized, isValid: false, bank: null };
+}
+
+export function isFinancialValue(value: string): boolean {
+  const info = getFinancialInfo(value);
+  return info ? info.isValid : false;
 }

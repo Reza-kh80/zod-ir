@@ -7,7 +7,10 @@ import {
   isCardNumber,
   isSheba,
   getBankInfo,
+  getFinancialInfo,
+  isFinancialValue,
   type BankInfo,
+  type FinancialInfo,
 } from "./modules/financial";
 import {
   isIranianMobile,
@@ -96,6 +99,11 @@ export const zJalaliDate = (options?: BaseOptions) =>
     message: getMessage("date", options),
   });
 
+export const zFinancial = (options?: BaseOptions) =>
+  z.string().refine((val) => isFinancialValue(val), {
+    message: getMessage("financial", options),
+  });
+
 export const preprocessNumber = (schema: z.ZodTypeAny) =>
   z.preprocess((val) => {
     if (typeof val === "string") {
@@ -123,10 +131,13 @@ export {
   getBillInfo,
   isJalaliDate,
   getJalaliDateInfo,
+  getFinancialInfo,
+  isFinancialValue,
   type JalaliDateInfo,
   type BankInfo,
   type OperatorInfo,
   type BillInfo,
   type PlateInfo,
   type BaseOptions,
+  type FinancialInfo,
 };
