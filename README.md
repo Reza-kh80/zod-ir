@@ -292,7 +292,7 @@ pnpm test
 
 - Bank and Operator logos are courtesy of [Zegond's Logos Project](https://github.com/zegond).
 
-## Support ☕
+## Support
 
 `zod-ir` is an open-source project and free to use. If it saved you some time and you'd like to say thanks, you can support its development via crypto. It's completely optional but highly appreciated!
 
