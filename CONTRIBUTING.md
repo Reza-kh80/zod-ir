@@ -2,72 +2,96 @@
 
 First off, thanks for taking the time to contribute! 🎉
 
-The following is a set of guidelines for contributing to `zod-ir`. These are mostly guidelines, not rules. Use your best judgment and feel free to propose changes to this document in a pull request.
+When it comes to open source, there are different ways you can contribute, all of which are valuable. Here are a few guidelines that should help you as you prepare your contribution.
 
-## Getting Started
+## Initial Steps
 
-### Prerequisites
+Before you start working on a contribution, **create an issue** describing what you want to build. It's possible someone else is already working on something similar, or perhaps there is a reason that feature isn't implemented. The maintainers will point you in the right direction.
 
-- Node.js (Latest LTS recommended)
-- PNPM (This project uses `pnpm` for package management)
+## Development
 
-### Installation
+The following steps will get you setup to contribute changes to this repo:
 
-1. **Clone the repository:**
+1. **Fork** this repo to your own GitHub account.
+
+2. **Clone** your forked repo:
 
    ```bash
-   git clone [https://github.com/Reza-kh80/zod-ir.git](https://github.com/Reza-kh80/zod-ir.git)
+   git clone [https://github.com/YOUR_USERNAME/zod-ir.git](https://github.com/YOUR_USERNAME/zod-ir.git)
    cd zod-ir
 
    ```
 
-2. Install dependencies:
+3. Install dependencies (We use `pnpm`):
 
-```bash
-pnpm install
-```
+   ```bash
+   pnpm install
+   ```
 
-Development Workflow
-Running Tests
-We use Vitest for testing. Please ensure all tests pass before submitting a PR.
+4. Create a branch for your changes:
 
-```bash
-# Run tests once
-pnpm test
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
 
-# Run tests in watch mode (during development)
-pnpm test --watch
-```
+## Project Structure
 
-Building the Project
-To check if the project builds correctly:
+The project follows a modular architecture:
 
-```bash
-pnpm build
-```
+- `src/modules/*`: Core validation logic (e.g., `identity`, `financial`, `contact`).
+- `src/data/*`: Static datasets (e.g., city codes, bank info).
+- `src/utils/*`: Shared helper functions.
 
-Pull Request Process
-Fork the repo and create your branch from main.
+## Commands
 
-If you've added code that should be tested, add tests.
+`pnpm build`
 
-Ensure the test suite passes.
+- Bundles the project using `tsup` to `dist/`.
+- Run this to ensure your changes build correctly without errors.
 
-Make sure your code lints (if a linter is configured).
+`pnpm test`
 
-Format your commit messages using Conventional Commits.
+- Runs all unit tests using **Vitest**.
+- **Crucial:** Please ensure all tests pass before submitting a PR.
 
-Example: feat(identity): add new passport validation
+`pnpm test --watch`
 
-Example: fix(bank): fix sheba regex for Mellat bank
+- Runs tests in watch mode. Useful during development to see immediate feedback.
 
-Example: docs: update readme examples
+## Writing Tests
 
-Code Style
-Use TypeScript for all logic.
+`zod-ir` aims for high test coverage. After implementing your contribution, please write tests for it.
 
-Prefer functional programming patterns where possible (pure functions).
+- Locate the corresponding test file in `src/modules/*.test.ts` (e.g., if you edited `bill.ts`, check `bill.test.ts`).
 
-Keep external dependencies to zero.
+- Add test cases covering both valid and invalid scenarios.
 
-Thank you for your contribution!
+## Commit Messages
+
+We follow the [Conventional](https://www.conventionalcommits.org) Commits specification. This helps us generate changelogs automatically.
+
+**Format:** `<type>(<scope>): <description>`
+
+Examples:
+
+- `feat(financial): add support for new bank bin`
+
+- `fix(identity): correct validation logic for passport`
+
+- `docs: update readme examples`
+
+- `chore: update dependencies`
+
+## Submitting a Pull Request
+
+1. Push your changes to your fork: `git push origin feat/your-feature-name`
+
+2. Go to [zod-ir Pull Requests](https://github.com/Reza-kh80/zod-ir/pulls) and create a new PR.
+
+3. Describe your changes and link the related issue (e.g., "Closes #12").
+
+4. Wait for the maintainers to review. We tried to be fast! ⚡
+
+## License
+
+By contributing your code to the zod-ir GitHub repository, you agree to license your contribution under the MIT license.
