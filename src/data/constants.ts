@@ -1,9 +1,6 @@
-const CDN_BANKS =
-  "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/banks";
-const CDN_OPERATORS =
-  "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/operators";
-const CDN_BILLS =
-  "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/assets/bills";
+const CDN_BILLS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/src/assets/logos/bills";
+const CDN_BANKS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/src/assets/logos/banks";
+const CDN_OPERATORS = "https://cdn.jsdelivr.net/gh/Reza-kh80/zod-ir@main/src/assets/logos/operators";
 
 export const BANKS = {
   "603799": {
