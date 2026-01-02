@@ -62,10 +62,12 @@
   "author": "Reza kheradmandi <r.kheradmandi70@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "tsdown": "0.18.3",
+    "publint": "0.3.16",
+    "tsdown": "0.18.4",
     "typescript": "5.9.3",
+    "unplugin-unused": "0.5.6",
     "vitest": "4.0.16",
-    "zod": "4.2.1"
+    "zod": "4.3.4"
   },
   "peerDependencies": {
     "zod": "^3.0.0 || ^4.0.0"
