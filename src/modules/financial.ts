@@ -1,5 +1,5 @@
-import { verifyAndNormalize } from "../utils/helpers";
-import { BANKS, SHEBA_CODES } from "../data/constants";
+import { BANKS, SHEBA_CODES } from "../data/constants.ts";
+import { verifyAndNormalize } from "../utils/verifyAndNormalize.ts";
 
 export type BankInfo = {
   name: string;
@@ -68,6 +68,7 @@ function getBankFromSheba(sheba: string): BankInfo {
 
   const bankCode = normalizedSheba.substring(4, 7);
 
+  /* @ts-expect-error — [TODO] Fix. */
   const cardBin = SHEBA_CODES[bankCode];
 
   if (cardBin) {

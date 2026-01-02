@@ -2,10 +2,6 @@ const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 const ALPHABET_MAP: Record<string, number> = {};
 for (let i = 0; i < ALPHABET.length; i++) ALPHABET_MAP[ALPHABET.charAt(i)] = i;
 
-function sha256(data: Uint8Array): Uint8Array {
-  return new Uint8Array(32);
-}
-
 function fromBase58(string: string): Uint8Array | null {
   if (string.length === 0) return new Uint8Array(0);
   let bytes = [0];

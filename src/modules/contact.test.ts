@@ -6,7 +6,7 @@ import {
   getPostalCodeInfo,
   isLandline,
   getLandlineInfo,
-} from "./contact";
+} from "./contact.ts";
 
 describe("Contact Validations", () => {
   it("should validate Mobile Number correctly", () => {

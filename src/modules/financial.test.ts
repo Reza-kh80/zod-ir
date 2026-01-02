@@ -1,10 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  isCardNumber,
-  isSheba,
-  getBankInfo,
-  getFinancialInfo,
-} from "./financial";
+import { isCardNumber, isSheba, getBankInfo, getFinancialInfo } from "./financial.ts";
 
 describe("Financial Validations", () => {
   it("should validate Card Number correctly", () => {

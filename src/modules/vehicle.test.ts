@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isPlateNumber, getPlateInfo } from "./vehicle";
+import { isPlateNumber, getPlateInfo } from "./vehicle.ts";
 
 describe("Vehicle Validations", () => {
   it("should validate Plate Number correctly", () => {

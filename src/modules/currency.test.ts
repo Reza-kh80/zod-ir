@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { transformToCurrency, numberToText, formatCurrency } from "./currency";
+import { transformToCurrency, numberToText, formatCurrency } from "./currency.ts";
 
 describe("Currency Transformations", () => {
   it("should parse huge numbers from text", () => {

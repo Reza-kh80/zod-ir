@@ -1,5 +1,5 @@
-import { verifyAndNormalize } from "../utils/helpers";
-import { PLATE_CITY_CODES } from "../data/plates";
+import { PLATE_CITY_CODES } from "../data/plateCityCodes.ts";
+import { verifyAndNormalize } from "../utils/verifyAndNormalize.ts";
 
 const ALL_PROVINCES = PLATE_CITY_CODES as unknown as readonly {
   province: string;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isJalaliDate, getJalaliDateInfo } from "./date";
+import { isJalaliDate, getJalaliDateInfo } from "./date.ts";
 
 describe("Jalali Date Validations", () => {
   it("should validate correct dates", () => {

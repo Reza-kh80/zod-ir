@@ -1,8 +1,13 @@
-ignoredBuiltDependencies:
-  - esbuild
-
 savePrefix: ''
-
-shellEmulator: true
-
 useBetaCli: true
+shellEmulator: true
+shamefullyHoist: true # Required for the ESLint VSCode extension to work properly.
+
+onlyBuiltDependencies:
+  - esbuild
+  - simple-git-hooks
+  - unrs-resolver
+
+peerDependencyRules:
+  allowedVersions:
+    eslint-plugin-vue>vue-eslint-parser@^10.0.0: 9.4.3

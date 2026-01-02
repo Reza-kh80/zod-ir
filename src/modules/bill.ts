@@ -1,5 +1,5 @@
-import { verifyAndNormalize } from "../utils/helpers";
-import { BILL_TYPES } from "../data/constants";
+import { BILL_TYPES } from "../data/constants.ts";
+import { verifyAndNormalize } from "../utils/verifyAndNormalize.ts";
 
 function calculateBillCheckDigit(code: string): number {
   let sum = 0;

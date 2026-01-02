@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isCryptoAddress, getCryptoInfo } from "./crypto";
+import { isCryptoAddress, getCryptoInfo } from "./crypto.ts";
 
 describe("Crypto Validations", () => {
   it("should validate TRC20 (Tron) addresses correctly", () => {

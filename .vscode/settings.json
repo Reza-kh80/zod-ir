@@ -1,0 +1,62 @@
+{
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "oxc.lint.run": "onSave",
+  "eslint.run": "onSave",
+  "eslint.format.enable": true,
+  "eslint.validate": ["javascript", "typescript"],
+  "editor.codeActionsOnSave": {
+    "source.sort.json": "never",
+    "source.sortImports": "never",
+    "source.organizeImports": "never",
+    "source.removeUnusedImports": "never",
+    "source.fixAll.oxc": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "[html]": {
+    "editor.defaultFormatter": null
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "vscode.markdown-language-features"
+  },
+  "[javascript][typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+
+  /* Silently auto-fix stylistic rules. */
+  "eslint.rules.customizations": [
+    { "rule": "*styl*", "severity": "off", "fixable": true },
+    { "rule": "*sort*", "severity": "off", "fixable": true },
+    { "rule": "*indent", "severity": "off", "fixable": true },
+    { "rule": "*quotes", "severity": "off", "fixable": true },
+    { "rule": "import*", "severity": "off", "fixable": true },
+    { "rule": "*-spac*", "severity": "off", "fixable": true },
+    { "rule": "*order-*", "severity": "off", "fixable": true },
+    { "rule": "*newline*", "severity": "off", "fixable": true },
+    { "rule": "*attribute*", "severity": "off", "fixable": true }
+  ],
+
+  "files.associations": {
+    "*.{svg}": "html",
+    ".gitmessage": "git-commit"
+  },
+  "[git-commit]": {
+    "editor.rulers": [50, 72]
+  },
+
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    ".gitignore": ".gitattributes, .gitmessage",
+    "*.js": "$(capture).js.map, $(capture).*.js, $(capture).d.ts",
+    "*.cjs": "$(capture).cjs.map, $(capture).*.cjs, $(capture).d.cts",
+    "*.mjs": "$(capture).mjs.map, $(capture).*.mjs, $(capture).d.mts",
+    "*.ts": "$(capture).test.ts",
+    "README.md": "CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE",
+    "package.json": ".editorconfig, .oxlintrc.json, eslint.config.ts, pnpm-lock.yaml, pnpm-workspace.yaml, prettier.config.ts, tsconfig.json, tsdown.config.ts, vitest.config.ts"
+  }
+}

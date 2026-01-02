@@ -1,36 +1,8 @@
 {
   "name": "zod-ir",
   "version": "1.6.0",
+  "license": "MIT",
   "description": "Zod validators for Iranian data types such as Melli/national code, sheba, phone, passport, etc.",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.cts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
-    }
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
-  "type": "module",
-  "packageManager": "pnpm@10.26.2",
-  "scripts": {
-    "test": "vitest run",
-    "build": "tsdown",
-    "prepublishOnly": "npm run test && npm run build"
-  },
   "keywords": [
     "zod",
     "zod-utils",
@@ -51,18 +23,82 @@
     "national-code",
     "license-plate"
   ],
+  "homepage": "https://github.com/Reza-kh80/zod-ir#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Reza-kh80/zod-ir.git"
   },
   "bugs": {
-    "url": "https://github.com/Reza-kh80/zod-ir/issues"
+    "url": "https://github.com/Reza-kh80/zod-ir/issues/new?template=bug_report.md"
   },
-  "homepage": "https://github.com/Reza-kh80/zod-ir#readme",
-  "author": "Reza kheradmandi <r.kheradmandi70@gmail.com>",
-  "license": "MIT",
+  "author": {
+    "name": "Reza Kheradmandi",
+    "email": "r.kheradmandi70@gmail.com",
+    "url": "https://github.com/Reza-kh80"
+  },
+  "funding": "https://github.com/Reza-kh80/zod-ir#funding",
+  "files": [
+    "./dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "engines": {
+    "name": "node",
+    "version": "^22.18.0",
+    "onfail": "download"
+  },
+  "packageManager": "pnpm@10.27.0",
+  "scripts": {
+    "prepublishOnly": "pnpm build",
+    "prepare": "pnpm git:gitmessage && simple-git-hooks",
+    "git:gitmessage": "git config --local commit.template \".gitmessage\"",
+    "test": "vitest",
+    "build": "tsdown",
+    "format": "prettier --write . '!**/*.{js,cjs,mjs,ts,cts,mts,md,svg}' --cache",
+    "lint:oxlint": "oxlint --fix",
+    "lint:eslint": "eslint --fix --cache --cache-location=./node_modules/.cache/.eslintcache",
+    "lint:inspect": "pnpm eslint-config-inspector",
+    "lint": "pnpm lint:oxlint && pnpm lint:eslint",
+    "check:types": "tsc",
+    "check:exports": "attw --pack --profile=node16",
+    "update:actions": "actions-up --yes",
+    "ci:validate": "pnpm format && pnpm lint && pnpm check:types && pnpm test run && pnpm build && pnpm check:exports"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "./node_modules/.bin/nano-staged"
+  },
+  "nano-staged": {
+    "**/*.{js,ts}": "pnpm lint",
+    "**/*.{json,jsonc,yaml,yml,lock}": "pnpm format"
+  },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.2",
+    "@eslint/config-inspector": "1.4.2",
+    "@shayanthenerd/eslint-config": "0.14.0",
+    "actions-up": "1.8.0",
+    "nano-staged": "0.9.0",
+    "oxlint": "1.36.0",
+    "prettier": "3.7.4",
     "publint": "0.3.16",
+    "simple-git-hooks": "2.13.1",
     "tsdown": "0.18.4",
     "typescript": "5.9.3",
     "unplugin-unused": "0.5.6",
