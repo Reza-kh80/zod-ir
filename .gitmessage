@@ -1,0 +1,40 @@
+# ====================================== Template =======================================
+# <type>[(scope)][!]: <summary> (maximum 50 characters)
+
+# [body]: Explain WHY you are making this change, not HOW. (wrap lines at 72 characters)
+
+# [footer]
+# Signed-off-by: <name> (<email address>)
+# Reviewed-by: <name> (@<GitHub username>)
+# References/Fixes: #<GitHub issue number>
+# =======================================================================================
+
+
+# =================================== Commit Message ====================================
+
+# =======================================================================================
+
+
+# ==================================== Specification ====================================
+# https://conventionalcommits.org - <required field> - [optional field]
+
+# Remember to:
+# - not capitalize the subject line, nor end it with a period;
+# - separate subject, body, footer, and paragraphs with a blank line;
+# - start multi-line bullet points with 2 whitespaces followed by "-";
+# - use the imperative, present tense (e.g., "fix" not "fixed" nor "fixes").
+
+# | Type        | Description                                                           |
+# | ----------- | --------------------------------------------------------------------- |
+# | fix         | Correction of bugs or issues                                          |
+# | feat        | Introduction of a new feature                                         |
+# | revert      | Reversion to a previous commit                                        |
+# | docs        | Changes or additions to the documentation                             |
+# | ci          | Changes to CI configuration files or scripts                          |
+# | style       | Code style changes that don't affect functionality                    |
+# | chore       | Minor maintenance activities — no production code change              |
+# | refactor    | Code revisions and improvements — no production code change           |
+# | test        | Addition or refactoring of tests — no production code change          |
+# | build       | Changes that affect the build system or external dependencies         |
+# | perf        | Optimizations that improve the performance of production code         |
+# =======================================================================================
