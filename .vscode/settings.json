@@ -21,7 +21,7 @@
     "editor.defaultFormatter": null
   },
   "[markdown]": {
-    "editor.defaultFormatter": "vscode.markdown-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascript][typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"

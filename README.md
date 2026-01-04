@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="zod-ir-logo.png" width="250"  alt="zod-ir logo" />
+  <img src="./assets/images/zod-ir-logo.png" width="250"  alt="zod-ir logo" />
 
   <h1>The Ultimate Zod Utility for Iranian Data Structures</h1>
   <p>
@@ -33,9 +33,11 @@
 <br />
 
 ## Why zod-ir? 🚀
+
 Building forms for Iranian applications often involves validating specific local data structures like national codes, bank cards, and Sheba numbers. `zod-ir` seamlessly integrates these validations into **Zod**, while also offering powerful **Data Extraction** tools and a superior **Developer Experience**.
 
 ### Key Features ✨
+
 - 🧠 **Smart Extraction:** go beyound validation and extract metadata. (get bank name from card number and city from landline/postal code).
 - 🛠 **Standalone & Reusable:** Use validators either inside Zod schemas or as standalone utility functions.
 - ⚡ **Zero Dependencies:** No heavy dependencies— lightweight and tree-shakeable.
@@ -43,6 +45,7 @@ Building forms for Iranian applications often involves validating specific local
 - 🧪 **Battle-Tested:** 100% test coverage for critical algorithms (national code, IBAN, etc.).
 
 ### Feature Highlights 🌟
+
 - **Smart Financial:** auto-detects **card number** vs. **Sheba (IBAN)** and returns the corresponding bank info and logo.
 - **Jalali Date:** validates Persian dates with precise **Leap Year (Kabisa)** calculation.
 - **Crypto Support:** native validation for **TRC20**, **ERC20**, and **Bitcoin**.
@@ -52,6 +55,7 @@ Building forms for Iranian applications often involves validating specific local
 ---
 
 ## Installation 📦
+
 ```bash
 npm install zod zod-ir
 # or
@@ -61,6 +65,7 @@ yarn add zod zod-ir
 ```
 
 ## Usage: Standalone Mode (Utilities) ⚒️
+
 You don't need to use Zod! zod-ir exports all validation logic as pure functions—perfect for backend utilities or non-form logic.
 
 ```typescript
@@ -84,7 +89,7 @@ console.log(location.province_fa); // "تهران"
 ## Usage: Zod Schema Mode 💡
 
 1. Smart Contact and Address <br />
-Validate landlines and postal codes, and automatically extract province/city in both Persian and English.
+   Validate landlines and postal codes, and automatically extract province/city in both Persian and English.
 
 ```typescript
 import * as z from 'zod';
@@ -117,14 +122,14 @@ const zipInfo = getPostalCodeInfo('8391853612');
 ```
 
 2. Smart Financial Validation <br />
-Don't ask users for either card number or Sheba—use `zFinancial` to accept both!
+   Don't ask users for either card number or Sheba—use `zFinancial` to accept both!
 
 ```typescript
 import * as z from 'zod';
 import { zFinancial, getFinancialInfo } from 'zod-ir';
 
 const ValidationSchema = z.object({
-  destination: zFinancial({  message: 'Invalid card number or Sheba.' }),
+  destination: zFinancial({ message: 'Invalid card number or Sheba.' }),
 });
 
 // Extract metadata (bank name, Logo, type)
@@ -149,7 +154,7 @@ console.log(info);
 ```
 
 3. Crypto Wallet Validation <br />
-Perfect for Fintech and exchange apps. Supports TRC20 (USDT), ERC20, and BTC.
+   Perfect for Fintech and exchange apps. Supports TRC20 (USDT), ERC20, and BTC.
 
 ```typescript
 import { zCrypto, getCryptoInfo } from 'zod-ir';
@@ -177,7 +182,7 @@ console.log(details);
 ```
 
 4. Jalali Date Validation <br />
-Validates Persian dates mathematically, checking days in each month and leap years.
+   Validates Persian dates mathematically, checking days in each month and leap years.
 
 ```typescript
 import { zJalaliDate } from 'zod-ir';
@@ -194,7 +199,7 @@ ValidationSchema.parse({ birthDate: '1402/12/30' });
 ```
 
 5. Comprehensive Form Example <br />
-A full registration form handling Auto-fix (Persian digits), Mobile, and National Code.
+   A full registration form handling Auto-fix (Persian digits), Mobile, and National Code.
 
 ```typescript
 import * as z from 'zod';
@@ -223,7 +228,7 @@ const UserSchema = z.object({
 ```
 
 6. Smart Currency ₿ <br />
-Automatically validates, parses, and formats currency input. It handles Persian text, numbers, and formatted strings (mixed).
+   Automatically validates, parses, and formats currency input. It handles Persian text, numbers, and formatted strings (mixed).
 
 ```typescript
 import { zToman, transformToCurrency, numberToText } from 'zod-ir';
@@ -248,56 +253,64 @@ console.log(numberToText(2500000)); // "دو میلیون و پانصد هزار
 ```
 
 ## Metadata Helpers 🛠️
+
 zod-ir isn't just for validation—it also provides rich metadata for your UI.
-| Function                  | Return Type                  | Description                                            |
+| Function | Return Type | Description |
 | :------------------------ | :--------------------------- | ------------------------------------------------------ |
-| `getFinancialInfo(val)`   | `{ type, bank, isValid }`    | Smart! Detects card or Sheba, returns bank logo/color. |
-| `getBankInfo(card)`       | `{ name, label, logo, ... }` | Details for card numbers.                              |
-| `getCryptoInfo(addr)`     | `{ ticker, network }`        | Detects TRC20, ERC20, and BTC networks.                |
-| `getMobileOperator(num)`  | `{ name, label, logo }`      | Returns the operator (MCI, Irancell) and the Logo.     |
-| `getBillInfo(id, payId)`  | `{ type, amount, ... }`      | Bill type (water, gas), amount calculation, validity.  |
-| `getPlateInfo(plate)`     | `{ province, city }`         | Province and city of the license plate.                |
-| `getJalaliDateInfo(date)` | `{ year, month, isLeap }`    | Deconstructs Jalali date and checks for Leap Years.    |
-| `getLandlineInfo(num)`    | `{ province, city, ... }`    | Returns province/city (FA & EN) for landlines.         |
-| `getPostalCodeInfo(code)` | `{ province, city }`         | Returns province/city based on the postal code.        |
+| `getFinancialInfo(val)` | `{ type, bank, isValid }` | Smart! Detects card or Sheba, returns bank logo/color. |
+| `getBankInfo(card)` | `{ name, label, logo, ... }` | Details for card numbers. |
+| `getCryptoInfo(addr)` | `{ ticker, network }` | Detects TRC20, ERC20, and BTC networks. |
+| `getMobileOperator(num)` | `{ name, label, logo }` | Returns the operator (MCI, Irancell) and the Logo. |
+| `getBillInfo(id, payId)` | `{ type, amount, ... }` | Bill type (water, gas), amount calculation, validity. |
+| `getPlateInfo(plate)` | `{ province, city }` | Province and city of the license plate. |
+| `getJalaliDateInfo(date)` | `{ year, month, isLeap }` | Deconstructs Jalali date and checks for Leap Years. |
+| `getLandlineInfo(num)` | `{ province, city, ... }` | Returns province/city (FA & EN) for landlines. |
+| `getPostalCodeInfo(code)` | `{ province, city }` | Returns province/city based on the postal code. |
 
 ## API Reference 📚
+
 Identity & Contact
-| Validator        | Description                      |
+| Validator | Description |
 | :--------------- | :------------------------------- |
-| `zMelliCode`     | National code (Melli code)       |
-| `zShenaseMelli`  | Legal person ID (company)        |
-| `zPassport`      | Iranian passport                 |
-| `zIranianMobile` | Mobile number (09xx, +989xx)     |
-| `zPostalCode`    | 10-digit postal code             |
-| `zLandline`      | Landline phone number (021xx...) |
+| `zMelliCode` | National code (Melli code) |
+| `zShenaseMelli` | Legal person ID (company) |
+| `zPassport` | Iranian passport |
+| `zIranianMobile` | Mobile number (09xx, +989xx) |
+| `zPostalCode` | 10-digit postal code |
+| `zLandline` | Landline phone number (021xx...) |
 
 Financial & Assets
 | Validator | Description |
 | :------------- | :----------------------------------------- |
-| `zFinancial`   | Smart input (card number or Sheba)         |
-| `zCardNumber`  | Bank card number (16 digits)               |
-| `zSheba`       | IBAN (Sheba)                               |
-| `zCrypto`      | Crypto wallet (TRX, ETH, BTC)              |
-| `zBillId`      | Utility bill ID                            |
-| `zPaymentId`   | Utility payment ID                         |
-| `zPlateNumber` | Vehicle license plate                      |
-| `zJalaliDate`  | Persian date (YYYY/MM/DD)                  |
-| `zToman`       | Automatically validates the currency input |
+| `zFinancial` | Smart input (card number or Sheba) |
+| `zCardNumber` | Bank card number (16 digits) |
+| `zSheba` | IBAN (Sheba) |
+| `zCrypto` | Crypto wallet (TRX, ETH, BTC) |
+| `zBillId` | Utility bill ID |
+| `zPaymentId` | Utility payment ID |
+| `zPlateNumber` | Vehicle license plate |
+| `zJalaliDate` | Persian date (YYYY/MM/DD) |
+| `zToman` | Automatically validates the currency input |
 
 ## Versining Policy 🏷️
+
 This project adheres to [The Semantic Versioning Standard](https://semver.org).
 
 ## Contributing 🤝🏻
+
 Any form of contribution is always appreciated! Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## Credits 🙏🏻
+
 Bank and operator logos are courtesy of [Zegond's Logos Project](https://github.com/zegond).
 
 ## Funding 🌱
+
 `zod-ir` is an open-source project and free to use. If it saved you some time and you'd like to say thanks, you can support its development via crypto currency transactions. It's completely optional and highly appreciated!
+
 - **USDT (TRC20) / TRX:** `TWtnFa4xpvH9BvciSzw4hqXUDCibWhcYxX`
 - **Bitcoin:** `bc1qf2ry7mpnvncwapgu0al3wkxm4jxecac3s3pmf0`
 
 ## License 📃
+
 [MIT](LICENSE) License © 2026-PRESENT — [Reza Kheradmandi](https://github.com/Reza-kh80)
