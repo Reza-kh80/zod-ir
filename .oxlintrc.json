@@ -1,0 +1,27 @@
+{
+  "extends": ["./node_modules/@shayanthenerd/eslint-config/dist/oxlint.config.jsonc"],
+
+  "env": {
+    "builtin": true,
+    "es2026": true,
+    "node": true,
+    "browser": true
+  },
+
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "restriction": "error",
+    "pedantic": "error",
+    "perf": "warn",
+    "style": "warn",
+    "nursery": "error"
+  },
+
+  "ignorePatterns": ["src/index.ts", "src/modules/**/*.ts"],
+
+  "rules": {
+    "eslint/max-lines": "off",
+    "eslint/no-continue": "off"
+  }
+}

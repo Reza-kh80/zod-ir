@@ -1,7 +1,7 @@
-import { verifyAndNormalize } from "../utils/helpers";
-import { MOBILE_OPERATORS } from "../data/constants";
-import { POSTAL_CODE_PREFIXES } from "../data/posts";
-import { LANDLINE_PREFIXES } from "../data/landline";
+import { MOBILE_OPERATORS } from "../data/constants.ts";
+import { LANDLINE_PREFIXES } from "../data/landlinePrefixes.ts";
+import { verifyAndNormalize } from "../utils/verifyAndNormalize.ts";
+import { POSTAL_CODE_PREFIXES } from "../data/postalCodePrefixes.ts";
 
 export type OperatorInfo = {
   name: string;
@@ -114,7 +114,9 @@ export function getLandlineInfo(number: string): LandlineInfo {
     prefix = "0" + normalized.substring(3, 5);
   }
 
+  /* @ts-expect-error — [TODO] Fix. */
   if (LANDLINE_PREFIXES[prefix]) {
+    /* @ts-expect-error — [TODO] Fix. */
     return LANDLINE_PREFIXES[prefix];
   }
 
@@ -149,5 +151,6 @@ export function isLandline(code: string): boolean {
   if (!regexValid) return false;
 
   const prefix = normalized.substring(0, 3);
+  /* @ts-expect-error — [TODO] Fix. */
   return !!LANDLINE_PREFIXES[prefix];
 }

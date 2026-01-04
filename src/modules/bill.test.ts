@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isBillIdValid, getBillInfo } from "./bill";
+import { isBillIdValid, getBillInfo } from "./bill.ts";
 
 describe("Bill Validations", () => {
   it("should validate Bill ID correctly", () => {

@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "ESLint": {
+      "type": "stdio",
+      "command": "pnpm",
+      "args": ["dlx", "@eslint/mcp@latest"]
+    }
+  }
+}

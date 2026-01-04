@@ -1,4 +1,4 @@
-import { verifyAndNormalize } from "../utils/helpers";
+import { verifyAndNormalize } from "../utils/verifyAndNormalize.ts";
 
 const NUM_WORDS: Record<string, number> = {
   صفر: 0,

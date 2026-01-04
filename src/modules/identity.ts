@@ -1,4 +1,4 @@
-import { verifyAndNormalize } from "../utils/helpers";
+import { verifyAndNormalize } from "../utils/verifyAndNormalize.ts";
 
 export function isMelliCode(code: string): boolean {
   const normalized = verifyAndNormalize(code);

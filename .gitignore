@@ -1,5 +1,48 @@
-node_modules
-dist
-.DS_Store
-coverage
-.env
+# Dependencies
+**/node_modules
+
+# Environment variables
+**/.env
+**/.env.*
+**/!.env.example
+
+# Build outputs
+**/dist
+**/build
+**/.data
+**/.output
+**/.eslint-config-inspector
+
+# Cache
+**/tmp
+**/.tmp
+**/.npm
+**/temp
+**/.temp
+**/cache
+**/.cache
+**/.eslintcache
+**/.cspellcache
+**/*.tsbuildinfo
+**/vite.config.*.timestamp-*
+
+# Frameworks and tools
+**/.vite
+**/.vitest
+
+# Tests
+**/coverage
+**/_fixtures
+**/__snapshots__
+
+# Operating system and development environment
+**/.idea
+**/.fleet
+**/.history
+**/.DS_Store
+
+# Logs
+**/logs
+**/.logs
+**/*.log
+**/.vite-inspect

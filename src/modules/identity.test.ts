@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isMelliCode, isShenaseMelli, isPassport } from "./identity";
+import { isMelliCode, isShenaseMelli, isPassport } from "./identity.ts";
 
 describe("Identity Validations", () => {
   it("should validate Melli Code correctly", () => {
