@@ -8,6 +8,8 @@
     Lightweight • Zero Dependencies • Type-safe.
   </p>
 
+📖 [Read the Full Documentation on daxra.ir](https://daxra.ir/docs/zod-ir)
+
   <div>
     <a href="https://www.npmjs.com/package/zod-ir">
       <img src="https://img.shields.io/npm/v/zod-ir?style=flat-square&color=3b82f6" alt="npm version" />
